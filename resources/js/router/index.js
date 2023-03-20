@@ -2,6 +2,10 @@ import {createWebHistory, createRouter} from "vue-router";
 
 import Home from '../page/Home';
 
+import Admin from '../admin/Mainpage';
+import ServiceRequest from '../admin/ServiceRequest';
+import MedicalService from '../admin/MedicalService';
+
 
 export const routes = [
     {
@@ -9,6 +13,23 @@ export const routes = [
         path: '/',
         component: Home,
 
+    },
+    {
+        name: 'admin',
+        path: '/admin',
+        component: Admin,
+        children:[
+            {
+                name: 'medicalservice',
+                path: 'medical-service',
+                component: MedicalService,
+            },
+            {
+                name: 'servicerequest',
+                path: 'service-request',
+                component: ServiceRequest,
+            }
+        ]
     },
   
     
@@ -21,6 +42,9 @@ const router = createRouter({
 });
 const openRoutes = [
     'home',
+    'admin',
+    'medicalservice',
+    'servicerequest',
     
 ];
 
