@@ -15,11 +15,13 @@ class CreateScheduleTable extends Migration
     {
         Schema::create('schedule', function (Blueprint $table) {
             $table->id();
-            $table->integer('doctor_id')->nullable();
+            $table->integer('health_worker_id')->nullable();
+            $table->integer('medical_service_id')->nullable();
             $table->string('day')->nullable();
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
             $table->integer('visible')->nullable();
+            $table->integer('slot')->nullable();
             $table->timestamps();
         });
     }

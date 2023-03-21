@@ -5,6 +5,8 @@ import Home from '../page/Home';
 import Admin from '../admin/Mainpage';
 import ServiceRequest from '../admin/ServiceRequest';
 import MedicalService from '../admin/MedicalService';
+import HealthWorker from '../admin/HealthWorker';
+import Schedule from '../admin/Schedule';
 
 
 export const routes = [
@@ -28,6 +30,16 @@ export const routes = [
                 name: 'servicerequest',
                 path: 'service-request',
                 component: ServiceRequest,
+            },
+            {
+                name: 'healthworker',
+                path: 'health-workers',
+                component: HealthWorker,
+            },
+            {
+                name: 'schedule',
+                path: 'schedule',
+                component: Schedule,
             }
         ]
     },
@@ -45,6 +57,8 @@ const openRoutes = [
     'admin',
     'medicalservice',
     'servicerequest',
+    'healthworker',
+    'schedule',
     
 ];
 

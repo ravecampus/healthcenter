@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MedicalServiceController;
 use App\Http\Controllers\ServiceRequestController;
+use App\Http\Controllers\HealthWorkerController;
+use App\Http\Controllers\ScheduleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +17,8 @@ use App\Http\Controllers\ServiceRequestController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::resource('schedule', ScheduleController::class);
+Route::resource('health-worker', HealthWorkerController::class);
 Route::resource('medical-service', MedicalServiceController::class);
 Route::resource('service-request', ServiceRequestController::class);
 

@@ -51,8 +51,11 @@
                         <li> <router-link class="waves-effect waves-dark" :to="{name:'medicalservice'}" aria-expanded="false"><i
                                     class="fa fa-gear"></i><span class="hide-menu">Medical Service</span></router-link>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="icon-fontawesome.html" aria-expanded="false"><i
-                                    class="fa fa-smile-o"></i><span class="hide-menu">Icons</span></a>
+                        <li> <router-link class="waves-effect waves-dark" :to="{name:'healthworker'}" aria-expanded="false"><i
+                                    class="fa fa-users"></i><span class="hide-menu">Health Workers</span></router-link>
+                        </li>
+                        <li> <router-link class="waves-effect waves-dark" :to="{name:'schedule'}" aria-expanded="false"><i
+                                    class="fa fa-calendar"></i><span class="hide-menu">Schedule</span></router-link>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="map-google.html" aria-expanded="false"><i
                                     class="fa fa-globe"></i><span class="hide-menu">Map</span></a>
@@ -91,7 +94,8 @@ export default {
     },
     data(){
         return{
-
+            message:"",
+            status:0,
         }
     },
     methods:{
