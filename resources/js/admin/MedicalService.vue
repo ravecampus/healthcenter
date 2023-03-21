@@ -106,10 +106,12 @@ export default {
            $('.medical-service').modal('show');           
        },
        saveItem(){
-           this.$axios.get('sanctum/csrf-cookie').then(response=>{
+        if(this.post.id > 0){
+            this.$axios.get('sanctum/csrf-cookie').then(response=>{
                this.btncap = "Saving...";
-               this.$axios.post('api/medical-service', this.post).then(res=>{
+               this.$axios.put('api/medical-service/'+this.post.id, this.post).then(res=>{
                    this.btncap = "Save";
+                   this.$emit('show',{'message':'Medical Service has been modified!'});
                    this.post = {};
                    this.listMedicalService();
                    $('.medical-service').modal('hide');
@@ -118,6 +120,22 @@ export default {
                    this.errors = err.response.data.errors;
                });
            });
+        }else{
+            this.$axios.get('sanctum/csrf-cookie').then(response=>{
+               this.btncap = "Saving...";
+               this.$axios.post('api/medical-service', this.post).then(res=>{
+                   this.btncap = "Save";
+                   this.post = {};
+                   this.$emit('show',{'message':'Medical Service has been saved!'});
+                   this.listMedicalService();
+                   $('.medical-service').modal('hide');
+               }).catch(err=>{
+                   this.btncap = "Save";
+                   this.errors = err.response.data.errors;
+               });
+           });
+        }
+          
        },
        listMedicalService(){
            this.$axios.get('sanctum/csrf-cookie').then(response=>{

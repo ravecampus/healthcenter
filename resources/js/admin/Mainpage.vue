@@ -72,9 +72,9 @@
             </div>
             
         </aside>
-        
+        <flashmessage :message="message" :status="status"></flashmessage>
         <div class="page-wrapper">
-            <router-view></router-view>
+            <router-view @show="flashMessage"></router-view>
 
             <footer class="footer"> © 2021 Adminwrap by <a href="https://www.wrappixel.com/">wrappixel.com</a> </footer>
 
@@ -84,11 +84,43 @@
 </template>
 
 <script>
+import FlashMessage from '../page/FlashMessage.vue';
 export default {
+    components:{
+        flashmessage: FlashMessage,
+    },
     data(){
         return{
 
         }
+    },
+    methods:{
+        flashMessage(data){
+                this.showMessage(data)
+        },
+        showMessage(data){
+                this.message = data.message;
+                $('.fm-body').show();
+                setTimeout(() => {
+                    $('.fm-body').fadeOut("slow");
+                }, 700);
+        },
+        logout(){
+            this.$axios.get('/sanctum/csrf-cookie').then(response => {
+                this.$axios.post('api/logout')
+                    .then(response => {
+                        if (response.data.success) {
+                            window.location.href = "/"
+                        } 
+                    })
+                    .catch(function (error) {
+                        console.error(error);
+                    });
+            })
+        },
+    },
+    mounted(){
+
     }
 }
 </script>

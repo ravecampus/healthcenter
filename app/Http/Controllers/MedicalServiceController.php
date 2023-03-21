@@ -77,7 +77,15 @@ class MedicalServiceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'description' => 'required|string',
+        ]);
+        
+        $service = MedicalService::find($id);
+        $service->description = $request->description;
+        $service->save();
+            
+        return response()->json($service, 200);
     }
 
     /**
