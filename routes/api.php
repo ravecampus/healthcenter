@@ -18,6 +18,7 @@ use App\Http\Controllers\ScheduleController;
 |
 */
 Route::resource('schedule', ScheduleController::class);
+Route::get('list-health-worker', [HealthWorkerController::class, 'listHealthWorker']);
 Route::resource('health-worker', HealthWorkerController::class);
 Route::resource('medical-service', MedicalServiceController::class);
 Route::resource('service-request', ServiceRequestController::class);

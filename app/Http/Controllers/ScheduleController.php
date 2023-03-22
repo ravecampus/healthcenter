@@ -36,16 +36,17 @@ class ScheduleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'health_worker_id' => 'required',
-            'day' => 'required|string',
-            'start_time' => 'required',
-            'end_time' => 'required',
-            'visible' => 'required',
+            "health_worker_id" => "required",
+            "day"    => "required|array|min:1",
+            "day.*"  => "required|min:1",
+            "start_time" => "required",
+            "end_time" => "required",
+            "visible" => "required",
         ]);
         
         $sched = Schedule::create([
             'health_worker_id' => $request->health_worker_id,
-            'day' => $request->day,
+            'day' => $request->days,
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
             'visible' => $request->visible,
@@ -86,7 +87,24 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            "health_worker_id" => "required",
+            "day"    => "required|array|min:1",
+            "day.*"  => "required|min:1",
+            "start_time" => "required",
+            "end_time" => "required",
+            "visible" => "required",
+        ]);
+        
+        $sched = Schedule::find($id);
+            $sched->health_worker_id = $request->health_worker_id;
+            $sched->day = $request->days;
+            $sched->start_time = $request->start_time;
+            $sched->end_time = $request->end_time;
+            $sched->visible = $request->visible;
+            $sched->save();
+    
+        return response()->json($sched, 200);
     }
 
     /**

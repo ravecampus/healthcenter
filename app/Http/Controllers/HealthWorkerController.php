@@ -129,4 +129,9 @@ class HealthWorkerController extends Controller
     {
         //
     }
+
+    public function listHealthWorker(){
+        $user = User::where('role',1)->orderBy('last_name', 'asc')->get();
+        return response()->json($user, 200);
+    }
 }
