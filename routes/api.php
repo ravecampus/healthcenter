@@ -17,6 +17,12 @@ use App\Http\Controllers\ScheduleController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('auth-password', [AuthController::class, 'changePassword']);
+Route::post('auth-signin', [AuthController::class, 'signin']);
+Route::resource('auth', AuthController::class);
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+Route::post('schedule-visible', [ScheduleController::class, 'scheduleVisble']);
 Route::resource('schedule', ScheduleController::class);
 Route::get('list-health-worker', [HealthWorkerController::class, 'listHealthWorker']);
 Route::resource('health-worker', HealthWorkerController::class);

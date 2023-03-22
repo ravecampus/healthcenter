@@ -18,4 +18,8 @@ class Schedule extends Model
         'visible',
         'slot',
     ];
+
+    public function healthworker(){
+        return $this->hasOne(User::class, 'id', 'health_worker_id');
+    }
 }

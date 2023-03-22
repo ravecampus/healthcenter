@@ -28,3 +28,9 @@
 .hidden {
   display: none !important;
 }
+
+.sidebar-nav > ul > li > a.router-link-exact-active {
+  font-weight: 400;
+  color: #26c6da;
+  border-left: 3px solid #20aee3;
+}

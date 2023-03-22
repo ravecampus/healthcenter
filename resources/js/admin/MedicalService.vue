@@ -40,6 +40,10 @@
                                                 <button type="button" @click="editModal(list)" class="btn btn-info btn-sm text-white">
                                                     <i class="fa fa-edit"></i> Edit
                                                 </button>
+                                           
+                                                <!-- <button type="button" @click="deleteModal(list)" class="btn btn-danger btn-sm text-white">
+                                                    <i class="fa fa-trash"></i> Delete
+                                                </button> -->
                                             </div>
                                         </td>
                                     </tr>
@@ -80,6 +84,34 @@
                             {{ btncap }}
                         </button>
                         <!-- <button type="button" @click="cancelButton()" class="btn btn-secondary btn-sm">No</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade delete" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h4>Medical Service</h4>
+                </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label>Description</label>
+                                    <input type="text" v-model="post.description" class="form-control form-control-user" placeholder="Enter Description">
+                                    <span class="errors-material" v-if="errors.description">{{errors.description[0]}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer text-center">
+                        <button type="button" @click="saveItem()" class="btn btn-info text-white">
+                            <i class="fa fa-save"></i>
+                            {{ btncap }}
+                        </button>
+        
                     </div>
                 </div>
             </div>

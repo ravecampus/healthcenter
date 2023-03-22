@@ -20296,6 +20296,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _vuepic_vue_datepicker_dist_main_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @vuepic/vue-datepicker/dist/main.css */ "./node_modules/@vuepic/vue-datepicker/dist/main.css");
 /* harmony import */ var _table_DataTable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../table/DataTable */ "./resources/js/table/DataTable.vue");
 /* harmony import */ var _table_Pagination__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../table/Pagination */ "./resources/js/table/Pagination.vue");
+var _methods;
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
 
 
@@ -20310,16 +20315,19 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     var sortOrders = {};
     var columns = [{
-      label: 'Fullname',
+      label: 'ACTION',
       name: null
     }, {
-      label: 'Position',
+      label: 'HEALTH WORKER',
       name: null
     }, {
-      label: 'Contact Number',
+      label: 'DAYS',
       name: null
     }, {
-      label: 'Action',
+      label: 'TIME',
+      name: null
+    }, {
+      label: 'VISIBILITY',
       name: null
     }];
     columns.forEach(function (column) {
@@ -20331,7 +20339,9 @@ __webpack_require__.r(__webpack_exports__);
         day: []
       },
       errors: [],
+      post_: {},
       healthworkers: [],
+      schedules: [],
       days: [{
         'name': 'M - Monday',
         'val': 1
@@ -20375,41 +20385,41 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
-  methods: {
+  methods: (_methods = {
     saveItem: function saveItem() {
       var _this = this;
       this.post.days = JSON.stringify(this.post.day);
-      console.log(this.post);
-      // if(this.post.id > 0){
-      //     this.$axios.get('sanctum/csrf-cookie').then(response=>{
-      //        this.btncap = "Saving...";
-      //        this.$axios.put('api/medical-service/'+this.post.id, this.post).then(res=>{
-      //            this.btncap = "Save";
-      //            this.$emit('show',{'message':'Medical Service has been modified!'});
-      //            this.post = {};
-      //            this.listMedicalService();
-      //            $('.medical-service').modal('hide');
-      //        }).catch(err=>{
-      //            this.btncap = "Save";
-      //            this.errors = err.response.data.errors;
-      //        });
-      //    });
-      // }else{
-      this.$axios.get('sanctum/csrf-cookie').then(function (response) {
-        _this.btncap = "Saving...";
-        _this.$axios.post('api/schedule', _this.post).then(function (res) {
-          _this.btncap = "Save";
-          _this.post = {};
-          _this.$emit('show', {
-            'message': 'Schedule has been saved!'
+      if (this.post.id > 0) {
+        this.$axios.get('sanctum/csrf-cookie').then(function (response) {
+          _this.btncap = "Saving...";
+          _this.$axios.put('api/schedule/' + _this.post.id, _this.post).then(function (res) {
+            _this.btncap = "Save";
+            _this.$emit('show', {
+              'message': 'Medical Service has been modified!'
+            });
+            _this.post = {};
+            _this.listOfSchedule();
+          })["catch"](function (err) {
+            _this.btncap = "Save";
+            _this.errors = err.response.data.errors;
           });
-          //    this.listMedicalService();
-        })["catch"](function (err) {
-          _this.btncap = "Save";
-          _this.errors = err.response.data.errors;
         });
-      });
-      // }
+      } else {
+        this.$axios.get('sanctum/csrf-cookie').then(function (response) {
+          _this.btncap = "Saving...";
+          _this.$axios.post('api/schedule', _this.post).then(function (res) {
+            _this.btncap = "Save";
+            _this.post = {};
+            _this.$emit('show', {
+              'message': 'Schedule has been saved!'
+            });
+            _this.listOfSchedule();
+          })["catch"](function (err) {
+            _this.btncap = "Save";
+            _this.errors = err.response.data.errors;
+          });
+        });
+      }
     },
     listOfSchedule: function listOfSchedule() {
       var _this2 = this;
@@ -20486,11 +20496,83 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return time.join(''); // return adjusted time or original string
+    },
+    xtractDay: function xtractDay(data) {
+      var data_ = JSON.parse(data);
+      var txt = "";
+      data_.sort(function (a, b) {
+        return a - b;
+      });
+      data_.forEach(function (val) {
+        if (val == 1) {
+          txt += "M";
+        }
+        if (val == 2) {
+          txt += "T";
+        }
+        if (val == 3) {
+          txt += "W";
+        }
+        if (val == 4) {
+          txt += "TH";
+        }
+        if (val == 5) {
+          txt += "F";
+        }
+        if (val == 6) {
+          txt += "S";
+        }
+      });
+      return txt;
     }
-  },
+  }, _defineProperty(_methods, "extractTime", function extractTime(time) {
+    // Check correct time format and split into components
+    time = time.toString().match(/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+    if (time.length > 1) {
+      // If time format correct
+      time = time.slice(1); // Remove full string match value
+      time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
+      time[0] = +time[0] % 12 || 12; // Adjust hours
+    }
+
+    return time.join(''); // return adjusted time or original string
+  }), _defineProperty(_methods, "visibility", function visibility(data) {
+    this.post_ = data;
+    $(".visible").modal('show');
+  }), _defineProperty(_methods, "confirmChange", function confirmChange() {
+    var _this5 = this;
+    this.$axios.get('sanctum/csrf-cookie').then(function (response) {
+      _this5.$axios.post('api/schedule-visible', _this5.post_).then(function (res) {
+        _this5.post_ = {};
+        $(".visible").modal('hide');
+        _this5.listOfSchedule();
+      });
+    });
+  }), _defineProperty(_methods, "editSchedule", function editSchedule(data) {
+    this.post = data;
+    this.filterUser(data.health_worker_id);
+    if (data.day.length > 0) {
+      this.post.day = JSON.parse(data.day);
+    }
+    this.post.start_time = this.objectTime(data.start_time);
+    this.post.end_time = this.objectTime(data.end_time);
+    console.log(this.post);
+  }), _defineProperty(_methods, "objectTime", function objectTime(data) {
+    var prs = "1/1/2019 " + data;
+    var time = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)({
+      hours: new Date(prs).getHours(),
+      minutes: new Date(prs).getMinutes(),
+      seconds: new Date(prs).getSeconds()
+    });
+    return time;
+  }), _defineProperty(_methods, "cancelButton", function cancelButton() {
+    $('.visible').modal('hide');
+  }), _defineProperty(_methods, "newPost", function newPost() {
+    this.post = {};
+  }), _methods),
   mounted: function mounted() {
-    // this.listMedicalService();
     this.listHealthWorker();
+    this.listOfSchedule();
   }
 });
 
@@ -21075,6 +21157,45 @@ var _hoisted_29 = {
 var _hoisted_30 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
   "class": "fa fa-save"
 }, null, -1 /* HOISTED */);
+var _hoisted_31 = {
+  "class": "modal fade delete",
+  role: "dialog",
+  "aria-labelledby": "mediumModalLabel",
+  "aria-hidden": "true"
+};
+var _hoisted_32 = {
+  "class": "modal-dialog",
+  role: "document"
+};
+var _hoisted_33 = {
+  "class": "modal-content"
+};
+var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "modal-header"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", null, "Medical Service")], -1 /* HOISTED */);
+var _hoisted_35 = {
+  "class": "modal-body"
+};
+var _hoisted_36 = {
+  "class": "row"
+};
+var _hoisted_37 = {
+  "class": "col-md-12"
+};
+var _hoisted_38 = {
+  "class": "form-group mb-3"
+};
+var _hoisted_39 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", null, "Description", -1 /* HOISTED */);
+var _hoisted_40 = {
+  key: 0,
+  "class": "errors-material"
+};
+var _hoisted_41 = {
+  "class": "modal-footer text-center"
+};
+var _hoisted_42 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  "class": "fa fa-save"
+}, null, -1 /* HOISTED */);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
@@ -21092,7 +21213,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         return $options.editModal(list);
       },
       "class": "btn btn-info btn-sm text-white"
-    }, [_hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Edit ")], 8 /* PROPS */, _hoisted_16)])])]);
+    }, [_hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Edit ")], 8 /* PROPS */, _hoisted_16), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <button type=\"button\" @click=\"deleteModal(list)\" class=\"btn btn-danger btn-sm text-white\">\r\n                                                    <i class=\"fa fa-trash\"></i> Delete\r\n                                                </button> ")])])]);
   }), 128 /* KEYED_FRAGMENT */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_18, " No Result Found! ", 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$options.noData($data.medical_services)]])])])])])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_21, [_hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_23, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_26, [_hoisted_27, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "text",
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
@@ -21106,7 +21227,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $options.saveItem();
     }),
     "class": "btn btn-info text-white"
-  }, [_hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.btncap), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <button type=\"button\" @click=\"cancelButton()\" class=\"btn btn-secondary btn-sm\">No</button> ")])])])])]);
+  }, [_hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.btncap), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <button type=\"button\" @click=\"cancelButton()\" class=\"btn btn-secondary btn-sm\">No</button> ")])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_32, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_33, [_hoisted_34, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_37, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_38, [_hoisted_39, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    type: "text",
+    "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+      return $data.post.description = $event;
+    }),
+    "class": "form-control form-control-user",
+    placeholder: "Enter Description"
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.post.description]]), $data.errors.description ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_40, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.errors.description[0]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_41, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    onClick: _cache[4] || (_cache[4] = function ($event) {
+      return $options.saveItem();
+    }),
+    "class": "btn btn-info text-white"
+  }, [_hoisted_42, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.btncap), 1 /* TEXT */)])])])])])]);
 }
 
 /***/ }),
@@ -21138,7 +21272,7 @@ var _hoisted_3 = {
   "class": "row"
 };
 var _hoisted_4 = {
-  "class": "col-6"
+  "class": "col-5"
 };
 var _hoisted_5 = {
   "class": "card shadow-sm"
@@ -21157,7 +21291,7 @@ var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
   "class": ""
 }, " Asigned Health Worker: ")], -1 /* HOISTED */);
 var _hoisted_11 = {
-  "class": "col-6"
+  "class": "col-9"
 };
 var _hoisted_12 = ["value"];
 var _hoisted_13 = {
@@ -21171,7 +21305,7 @@ var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
   "class": "col-3 text-right"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", null, " Position: ")], -1 /* HOISTED */);
 var _hoisted_16 = {
-  "class": "col-6"
+  "class": "col-9"
 };
 var _hoisted_17 = {
   key: 0,
@@ -21244,57 +21378,76 @@ var _hoisted_39 = {
 var _hoisted_40 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
   "class": "fa fa-save"
 }, null, -1 /* HOISTED */);
-var _hoisted_41 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-  type: "button",
-  "class": "btn btn-info text-white"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+var _hoisted_41 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
   "class": "fa fa-file"
-}), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" New ")], -1 /* HOISTED */);
-var _hoisted_42 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "col-6"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"card shadow-sm\">\r\n                    <div class=\"card-body\">\r\n                        <h4 class=\"card-title\">List of Items</h4>\r\n                        <h6 class=\"card-subtitle\"></h6>\r\n                        <div class=\"table-responsive\">\r\n                            <data-table class=\"mt-2\" :columns=\"columns\" :sortKey=\"sortKey\" :sortOrders=\"sortOrders\" @sort=\"sortBy\">\r\n                                <tbody>\r\n                                    <tr class=\"tr-shadow\" v-for=\"(list, idx) in hworkers\" :key=\"idx\">\r\n                                        <td class=\"text-info\">\r\n                                            <strong>\r\n                                            {{ list.last_name}}, {{ list.first_name }} {{ list.middle_name }}\r\n                                            </strong>\r\n                                        </td>\r\n                                        <td>{{ extractPostion(list.position) }}</td>\r\n                                        <td>{{ list.contact_number }}</td>\r\n                                        <td>\r\n                                            <div class=\"table-data-feature\">\r\n                                                <button class=\"btn btn-info text-white btn-sm\" data-toggle=\"tooltip\" @click=\"editModal(list)\" title=\"Edit\">\r\n                                                    <i class=\"fa fa-pencil\"></i> Edit\r\n                                                </button>\r\n                                                \r\n                                            </div>\r\n                                        </td>\r\n                                    </tr>\r\n                                    <tr> \r\n                                        <td colspan=\"4\" v-show=\"!noData(hworkers)\">\r\n                                            No Result Found!\r\n                                        </td>\r\n                                    </tr>\r\n                                    <tr class=\"spacer\"></tr>\r\n                                </tbody>\r\n                            </data-table>\r\n                            <div>\r\n                                <pagination :pagination=\"pagination\"\r\n                                    @prev=\"listOfHWorker(pagination.prevPageUrl)\"\r\n                                    @next=\"listOfHWorker(pagination.nextPageUrl)\"\r\n                                    v-show=\"noData(hworkers)\">\r\n                                </pagination>\r\n                            </div>\r\n\r\n                        </div>\r\n                    </div>\r\n                </div> ")], -1 /* HOISTED */);
+}, null, -1 /* HOISTED */);
+var _hoisted_42 = {
+  "class": "col-7"
+};
 var _hoisted_43 = {
-  "class": "modal fade medical-service",
+  "class": "card shadow-sm"
+};
+var _hoisted_44 = {
+  "class": "card-body"
+};
+var _hoisted_45 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
+  "class": "card-title"
+}, "List of Items", -1 /* HOISTED */);
+var _hoisted_46 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h6", {
+  "class": "card-subtitle"
+}, null, -1 /* HOISTED */);
+var _hoisted_47 = {
+  "class": "table-responsive"
+};
+var _hoisted_48 = {
+  "class": "table-data-feature"
+};
+var _hoisted_49 = ["onClick"];
+var _hoisted_50 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  "class": "fa fa-pencil"
+}, null, -1 /* HOISTED */);
+var _hoisted_51 = {
+  "class": "text-info"
+};
+var _hoisted_52 = ["onClick"];
+var _hoisted_53 = {
+  colspan: "5"
+};
+var _hoisted_54 = {
+  "class": "modal fade visible",
   role: "dialog",
   "aria-labelledby": "mediumModalLabel",
   "aria-hidden": "true"
 };
-var _hoisted_44 = {
+var _hoisted_55 = {
   "class": "modal-dialog",
   role: "document"
 };
-var _hoisted_45 = {
+var _hoisted_56 = {
   "class": "modal-content"
 };
-var _hoisted_46 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_57 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "modal-header"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", null, "Medical Service")], -1 /* HOISTED */);
-var _hoisted_47 = {
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", null, "Schedule")], -1 /* HOISTED */);
+var _hoisted_58 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "modal-body"
-};
-var _hoisted_48 = {
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "row"
-};
-var _hoisted_49 = {
-  "class": "col-md-12"
-};
-var _hoisted_50 = {
-  "class": "form-group mb-3"
-};
-var _hoisted_51 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", null, "Description", -1 /* HOISTED */);
-var _hoisted_52 = {
-  key: 0,
-  "class": "errors-material"
-};
-var _hoisted_53 = {
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", null, "Do you want change visibility?")])], -1 /* HOISTED */);
+var _hoisted_59 = {
   "class": "modal-footer text-center"
 };
-var _hoisted_54 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
-  "class": "fa fa-save"
+var _hoisted_60 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  "class": "fa fa-check"
+}, null, -1 /* HOISTED */);
+var _hoisted_61 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+  "class": "fa fa-times"
 }, null, -1 /* HOISTED */);
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Datepicker = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Datepicker");
+  var _component_data_table = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("data-table");
+  var _component_pagination = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("pagination");
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [_hoisted_7, _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [_hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
     "class": "form-control form-control-sm",
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
@@ -21371,20 +21524,63 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[8] || (_cache[8] = function ($event) {
       return $options.saveItem();
     })
-  }, [_hoisted_40, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.btncap), 1 /* TEXT */)]), _hoisted_41])])])]), _hoisted_42]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"row\">\r\n            <div class=\"col-12\">\r\n                <div class=\"card\">\r\n                    <div class=\"card-body\">\r\n                        <h4 class=\"card-title\">List of Items</h4>\r\n                        <h6 class=\"card-subtitle\"></h6>\r\n                        <div class=\"table-responsive\">\r\n                            <table class=\"table\">\r\n                                <thead>\r\n                                    <tr>\r\n                                        <th>#</th>\r\n                                        <th>Description</th>\r\n                                        <th>Action</th>\r\n                                    </tr>\r\n                                </thead>\r\n                                <tbody>\r\n                                    <tr v-for=\"(list, indx) in medical_services\" :key=\"indx\">\r\n                                        <td>{{ indx + 1 }}</td>\r\n                                        <td>{{ list.description }}</td>\r\n                                        <td>\r\n                                            <div class=\"btn-group\">\r\n                                                <button type=\"button\" @click=\"editModal(list)\" class=\"btn btn-info btn-sm text-white\">\r\n                                                    <i class=\"fa fa-edit\"></i> Edit\r\n                                                </button>\r\n                                            </div>\r\n                                        </td>\r\n                                    </tr>\r\n                                    <tr> \r\n                                        <td colspan=\"4\" v-show=\"!noData(medical_services)\">\r\n                                            No Result Found!\r\n                                        </td>\r\n                                    </tr>\r\n                                    \r\n                                </tbody>\r\n                            </table>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </div> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_43, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_44, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_45, [_hoisted_46, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_47, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_48, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_49, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_50, [_hoisted_51, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-    type: "text",
-    "onUpdate:modelValue": _cache[9] || (_cache[9] = function ($event) {
-      return $data.post.description = $event;
-    }),
-    "class": "form-control form-control-user",
-    placeholder: "Enter Description"
-  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.post.description]]), $data.errors.description ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_52, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.errors.description[0]), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_53, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  }, [_hoisted_40, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.btncap), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
-    onClick: _cache[10] || (_cache[10] = function ($event) {
-      return $options.saveItem();
+    "class": "btn btn-info text-white",
+    onClick: _cache[9] || (_cache[9] = function ($event) {
+      return $options.newPost();
+    })
+  }, [_hoisted_41, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" New ")])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_42, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_43, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_44, [_hoisted_45, _hoisted_46, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_47, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_data_table, {
+    "class": "mt-2",
+    columns: $data.columns,
+    sortKey: $data.sortKey,
+    sortOrders: $data.sortOrders,
+    onSort: $options.sortBy
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.schedules, function (list, idx) {
+        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
+          "class": "tr-shadow",
+          key: idx
+        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_48, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+          "class": "btn btn-info text-white btn-sm",
+          "data-toggle": "tooltip",
+          onClick: function onClick($event) {
+            return $options.editSchedule(list);
+          },
+          title: "Edit"
+        }, [_hoisted_50, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Edit ")], 8 /* PROPS */, _hoisted_49)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_51, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("strong", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.healthworker.first_name) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.healthworker.last_name), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.xtractDay(list.day)), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.extractTime(list.start_time)) + " - " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.extractTime(list.end_time)), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+          href: "#",
+          onClick: function onClick($event) {
+            return $options.visibility(list);
+          }
+        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+          "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(list.visible == 1 ? 'fa fa-eye' : 'fa fa-eye-slash')
+        }, null, 2 /* CLASS */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(list.visible == 1 ? "Visible" : "Hide"), 1 /* TEXT */)], 8 /* PROPS */, _hoisted_52)])]);
+      }), 128 /* KEYED_FRAGMENT */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_53, " No Result Found! ", 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, !$options.noData($data.schedules)]])])])];
     }),
-    "class": "btn btn-info text-white"
-  }, [_hoisted_54, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.btncap), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <button type=\"button\" @click=\"cancelButton()\" class=\"btn btn-secondary btn-sm\">No</button> ")])])])])]);
+    _: 1 /* STABLE */
+  }, 8 /* PROPS */, ["columns", "sortKey", "sortOrders", "onSort"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_pagination, {
+    pagination: $data.pagination,
+    onPrev: _cache[10] || (_cache[10] = function ($event) {
+      return $options.listOfSchedule($data.pagination.prevPageUrl);
+    }),
+    onNext: _cache[11] || (_cache[11] = function ($event) {
+      return $options.listOfSchedule($data.pagination.nextPageUrl);
+    })
+  }, null, 8 /* PROPS */, ["pagination"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $options.noData($data.schedules)]])])])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_54, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_55, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_56, [_hoisted_57, _hoisted_58, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_59, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    onClick: _cache[12] || (_cache[12] = function ($event) {
+      return $options.confirmChange();
+    }),
+    "class": "btn btn-info btn-sm text-white"
+  }, [_hoisted_60, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Yes ")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    onClick: _cache[13] || (_cache[13] = function ($event) {
+      return $options.cancelButton();
+    }),
+    "class": "btn btn-secondary btn-sm"
+  }, [_hoisted_61, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" No ")])])])])])]);
 }
 
 /***/ }),
@@ -57865,7 +58061,7 @@ function useRoute() {
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"_args":[["axios@0.21.4","C:\\\\laragon\\\\www\\\\healthcenter"]],"_development":true,"_from":"axios@0.21.4","_id":"axios@0.21.4","_inBundle":false,"_integrity":"sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==","_location":"/axios","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"axios@0.21.4","name":"axios","escapedName":"axios","rawSpec":"0.21.4","saveSpec":null,"fetchSpec":"0.21.4"},"_requiredBy":["#DEV:/"],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.21.4.tgz","_spec":"0.21.4","_where":"C:\\\\laragon\\\\www\\\\healthcenter","author":{"name":"Matt Zabriskie"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"bugs":{"url":"https://github.com/axios/axios/issues"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"dependencies":{"follow-redirects":"^1.14.0"},"description":"Promise based HTTP client for the browser and node.js","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"homepage":"https://axios-http.com","jsdelivr":"dist/axios.min.js","keywords":["xhr","http","ajax","promise","node"],"license":"MIT","main":"index.js","name":"axios","repository":{"type":"git","url":"git+https://github.com/axios/axios.git"},"scripts":{"build":"NODE_ENV=production grunt build","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","examples":"node ./examples/server.js","fix":"eslint --fix lib/**/*.js","postversion":"git push && git push --tags","preversion":"npm test","start":"node ./sandbox/server.js","test":"grunt test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"},"typings":"./index.d.ts","unpkg":"dist/axios.min.js","version":"0.21.4"}');
+module.exports = JSON.parse('{"_from":"axios@^0.21","_id":"axios@0.21.4","_inBundle":false,"_integrity":"sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==","_location":"/axios","_phantomChildren":{},"_requested":{"type":"range","registry":true,"raw":"axios@^0.21","name":"axios","escapedName":"axios","rawSpec":"^0.21","saveSpec":null,"fetchSpec":"^0.21"},"_requiredBy":["#DEV:/"],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.21.4.tgz","_shasum":"c67b90dc0568e5c1cf2b0b858c43ba28e2eda575","_spec":"axios@^0.21","_where":"C:\\\\laragon\\\\www\\\\healthcenter","author":{"name":"Matt Zabriskie"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"bugs":{"url":"https://github.com/axios/axios/issues"},"bundleDependencies":false,"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"dependencies":{"follow-redirects":"^1.14.0"},"deprecated":false,"description":"Promise based HTTP client for the browser and node.js","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"homepage":"https://axios-http.com","jsdelivr":"dist/axios.min.js","keywords":["xhr","http","ajax","promise","node"],"license":"MIT","main":"index.js","name":"axios","repository":{"type":"git","url":"git+https://github.com/axios/axios.git"},"scripts":{"build":"NODE_ENV=production grunt build","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","examples":"node ./examples/server.js","fix":"eslint --fix lib/**/*.js","postversion":"git push && git push --tags","preversion":"npm test","start":"node ./sandbox/server.js","test":"grunt test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"},"typings":"./index.d.ts","unpkg":"dist/axios.min.js","version":"0.21.4"}');
 
 /***/ })
 

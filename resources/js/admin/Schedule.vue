@@ -16,7 +16,7 @@
             </div> -->
         </div>
         <div class="row">
-            <div class="col-6">
+            <div class="col-5">
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <h4>Add Schedule</h4>
@@ -28,7 +28,7 @@
                                 </label>
                                
                             </div>
-                            <div class="col-6">
+                            <div class="col-9">
                                 <select class="form-control form-control-sm" v-model="post.health_worker_id" @change="filterUser(post.health_worker_id)">
                                     <option v-for="(lis, idx) in healthworkers" :key="idx" :value="lis.id">{{ lis.first_name }} {{ lis.last_name}}</option>
                                 </select>
@@ -42,7 +42,7 @@
                                 </label>
                                
                             </div>
-                            <div class="col-6">
+                            <div class="col-9">
                                 <input type="text" readonly v-model="post.position" class="form-control form-control-sm">
                             </div>
                             <span class="errors-material" v-if="errors.position">{{errors.position[0]}}</span>
@@ -56,9 +56,7 @@
                                     <label class="form-check-label" :for="'day'+idx">
                                         {{ ls.name }}
                                     </label>
-                                    
                                 </li>
-                              
                                 <span class="errors-material" v-if="errors.day">{{errors.day[0]}}</span>
                             </div>
                         </div>
@@ -97,7 +95,7 @@
                                 <i class="fa fa-save"></i>
                                 {{ btncap }}
                             </button>
-                            <button type="button" class="btn btn-info text-white">
+                            <button type="button" class="btn btn-info text-white" @click="newPost()">
                                 <i class="fa fa-file"></i>
                                 New
                             </button>
@@ -105,118 +103,79 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6">
-                <!-- <div class="card shadow-sm">
+            <div class="col-7">
+                <div class="card shadow-sm">
                     <div class="card-body">
                         <h4 class="card-title">List of Items</h4>
                         <h6 class="card-subtitle"></h6>
                         <div class="table-responsive">
                             <data-table class="mt-2" :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
                                 <tbody>
-                                    <tr class="tr-shadow" v-for="(list, idx) in hworkers" :key="idx">
-                                        <td class="text-info">
-                                            <strong>
-                                            {{ list.last_name}}, {{ list.first_name }} {{ list.middle_name }}
-                                            </strong>
-                                        </td>
-                                        <td>{{ extractPostion(list.position) }}</td>
-                                        <td>{{ list.contact_number }}</td>
-                                        <td>
+                                    <tr class="tr-shadow" v-for="(list, idx) in schedules" :key="idx">
+                                         <td>
                                             <div class="table-data-feature">
-                                                <button class="btn btn-info text-white btn-sm" data-toggle="tooltip" @click="editModal(list)" title="Edit">
+                                                <button class="btn btn-info text-white btn-sm" data-toggle="tooltip" @click="editSchedule(list)" title="Edit">
                                                     <i class="fa fa-pencil"></i> Edit
                                                 </button>
                                                 
                                             </div>
                                         </td>
+                                        <td class="text-info">
+                                            <strong>
+                                            {{ list.healthworker.first_name}} {{ list.healthworker.last_name }}
+                                            </strong>
+                                        </td>
+                                        <td>{{ xtractDay(list.day) }}</td>
+                                       
+                                        <td>{{ extractTime(list.start_time) }} - {{ extractTime(list.end_time) }}</td>
+                                        <td>
+                                            <a href="#" @click="visibility(list)"> 
+                                                <i :class="list.visible == 1 ? 'fa fa-eye':'fa fa-eye-slash'"></i>
+                                                {{ list.visible == 1 ? "Visible" : "Hide" }}
+                                            </a>
+                                        </td>
+                                       
                                     </tr>
                                     <tr> 
-                                        <td colspan="4" v-show="!noData(hworkers)">
+                                        <td colspan="5" v-show="!noData(schedules)">
                                             No Result Found!
                                         </td>
                                     </tr>
-                                    <tr class="spacer"></tr>
                                 </tbody>
                             </data-table>
-                            <div>
-                                <pagination :pagination="pagination"
-                                    @prev="listOfHWorker(pagination.prevPageUrl)"
-                                    @next="listOfHWorker(pagination.nextPageUrl)"
-                                    v-show="noData(hworkers)">
-                                </pagination>
-                            </div>
-
+                        </div>
+                        <div>
+                            <pagination :pagination="pagination"
+                                @prev="listOfSchedule(pagination.prevPageUrl)"
+                                @next="listOfSchedule(pagination.nextPageUrl)"
+                                v-show="noData(schedules)">
+                            </pagination>
                         </div>
                     </div>
-                </div> -->
+                </div>
             </div>
         </div>
 
-    
-        <!-- <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">List of Items</h4>
-                        <h6 class="card-subtitle"></h6>
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Description</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(list, indx) in medical_services" :key="indx">
-                                        <td>{{ indx + 1 }}</td>
-                                        <td>{{ list.description }}</td>
-                                        <td>
-                                            <div class="btn-group">
-                                                <button type="button" @click="editModal(list)" class="btn btn-info btn-sm text-white">
-                                                    <i class="fa fa-edit"></i> Edit
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr> 
-                                        <td colspan="4" v-show="!noData(medical_services)">
-                                            No Result Found!
-                                        </td>
-                                    </tr>
-                                    
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
-        <div class="modal fade medical-service" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
+        <div class="modal fade visible" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h4>Medical Service</h4>
+                    <h4>Schedule</h4>
                 </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group mb-3">
-                                    <label>Description</label>
-                                    <input type="text" v-model="post.description" class="form-control form-control-user" placeholder="Enter Description">
-                                    <span class="errors-material" v-if="errors.description">{{errors.description[0]}}</span>
-                                </div>
-                            </div>
+                            <h4>Do you want change visibility?</h4>
                         </div>
                     </div>
                     <div class="modal-footer text-center">
-                        <button type="button" @click="saveItem()" class="btn btn-info text-white">
-                            <i class="fa fa-save"></i>
-                            {{ btncap }}
+                        <button type="button" @click="confirmChange()" class="btn btn-info btn-sm text-white">
+                            <i class="fa fa-check"></i>
+                            Yes
                         </button>
-                        <!-- <button type="button" @click="cancelButton()" class="btn btn-secondary btn-sm">No</button> -->
+                        <button type="button" @click="cancelButton()" class="btn btn-secondary btn-sm">
+                            <i class="fa fa-times"></i>
+                            No
+                        </button>
                     </div>
                 </div>
             </div>
@@ -243,10 +202,11 @@ export default {
     data(){
         let sortOrders = {};
         let columns =[
-        {label:'Fullname', name:null},
-        {label:'Position', name:null},
-        {label:'Contact Number', name:null},
-        {label:'Action', name:null},
+        {label:'ACTION', name:null},        
+        {label:'HEALTH WORKER', name:null},
+        {label:'DAYS', name:null},
+        {label:'TIME', name:null},
+        {label:'VISIBILITY', name:null},
         ];
         
         columns.forEach(column=>{
@@ -258,7 +218,9 @@ export default {
                 day:[]
             },
             errors:[],
+            post_:{},
             healthworkers:[],
+            schedules:[],
             days:[
                 {'name':'M - Monday', 'val':1},
                 {'name':'T - Tuesday', 'val':2},
@@ -296,35 +258,33 @@ export default {
    
        saveItem(){
         this.post.days = JSON.stringify(this.post.day);
-        console.log(this.post)
-        // if(this.post.id > 0){
-        //     this.$axios.get('sanctum/csrf-cookie').then(response=>{
-        //        this.btncap = "Saving...";
-        //        this.$axios.put('api/medical-service/'+this.post.id, this.post).then(res=>{
-        //            this.btncap = "Save";
-        //            this.$emit('show',{'message':'Medical Service has been modified!'});
-        //            this.post = {};
-        //            this.listMedicalService();
-        //            $('.medical-service').modal('hide');
-        //        }).catch(err=>{
-        //            this.btncap = "Save";
-        //            this.errors = err.response.data.errors;
-        //        });
-        //    });
-        // }else{
+        if(this.post.id > 0){
+            this.$axios.get('sanctum/csrf-cookie').then(response=>{
+               this.btncap = "Saving...";
+               this.$axios.put('api/schedule/'+this.post.id, this.post).then(res=>{
+                   this.btncap = "Save";
+                   this.$emit('show',{'message':'Medical Service has been modified!'});
+                   this.post = {};
+                   this.listOfSchedule();
+               }).catch(err=>{
+                   this.btncap = "Save";
+                   this.errors = err.response.data.errors;
+               });
+           });
+        }else{
             this.$axios.get('sanctum/csrf-cookie').then(response=>{
                this.btncap = "Saving...";
                this.$axios.post('api/schedule', this.post).then(res=>{
                    this.btncap = "Save";
                    this.post = {};
                    this.$emit('show',{'message':'Schedule has been saved!'});
-                //    this.listMedicalService();
+                   this.listOfSchedule();
                }).catch(err=>{
                    this.btncap = "Save";
                    this.errors = err.response.data.errors;
                });
            });
-        // }
+        }
           
        },
        listOfSchedule(urls='api/schedule'){
@@ -378,18 +338,18 @@ export default {
            });
         },
         filterUser(id){
-                this.healthworkers.forEach(val => {
-                    if(id == val.id){
-                        this.post.position = this.extractPostion(val.position);
-                    }
-                });
+            this.healthworkers.forEach(val => {
+                if(id == val.id){
+                    this.post.position = this.extractPostion(val.position);
+                }
+            });
         },
         extractPostion(num){
             return num == 1 ? "Nurse" : "Midwife";
         },
         extractTime(time){
           // Check correct time format and split into components
-            time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+            time = time.toString().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
             if (time.length > 1) { // If time format correct
                 time = time.slice (1);  // Remove full string match value
                 time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
@@ -397,11 +357,88 @@ export default {
             }
             return time.join (''); // return adjusted time or original string
         },
+        xtractDay(data){
+            let data_ = JSON.parse(data);
+            let txt = "";
+            data_.sort((a, b) => a - b);
+            data_.forEach(val=>{
+                if(val == 1){
+                    txt += "M";
+                }
+                if(val==2){
+                    txt += "T";
+                }
+                if(val==3){
+                    txt += "W";
+                }
+                if(val==4){
+                    txt += "TH";
+                }
+                if(val==5){
+                    txt += "F";
+                }
+                if(val==6){
+                    txt += "S";
+                }
+            });
+
+            return txt;
+        },
+        extractTime(time){
+          // Check correct time format and split into components
+            time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+
+            if (time.length > 1) { // If time format correct
+                time = time.slice (1);  // Remove full string match value
+                time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
+                time[0] = +time[0] % 12 || 12; // Adjust hours
+            }
+            return time.join (''); // return adjusted time or original string
+        },
+        visibility(data){
+            this.post_ = data;
+            $(".visible").modal('show');
+        },
+        confirmChange(){
+            this.$axios.get('sanctum/csrf-cookie').then(response=>{
+               this.$axios.post('api/schedule-visible', this.post_).then(res=>{
+                   this.post_ = {};
+                   $(".visible").modal('hide');
+                   this.listOfSchedule();
+               })
+           });
+        },
+        editSchedule(data){
+            this.post = data;
+            this.filterUser(data.health_worker_id);
+            if(data.day.length > 0){
+                this.post.day = JSON.parse(data.day);                
+            }
+            this.post.start_time = this.objectTime(data.start_time);
+            this.post.end_time = this.objectTime(data.end_time);
+            console.log(this.post)
+        },
+        objectTime(data){
+            let prs = "1/1/2019 "+data;
+            const time = ref({ 
+                hours: new Date(prs).getHours(),
+                minutes: new Date(prs).getMinutes(),
+                seconds: new Date(prs).getSeconds()
+            });
+
+            return time;
+        },
+        cancelButton(){
+            $('.visible').modal('hide');
+        },
+        newPost(){
+            this.post = {};
+        }
 
     },
     mounted() {
-        // this.listMedicalService();
         this.listHealthWorker();
+        this.listOfSchedule();
     },
 }
 </script>
