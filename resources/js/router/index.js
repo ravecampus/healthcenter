@@ -1,12 +1,14 @@
 import {createWebHistory, createRouter} from "vue-router";
 
 import Home from '../page/Home';
+import Login from '../page/Login';
 
 import Admin from '../admin/Mainpage';
 import ServiceRequest from '../admin/ServiceRequest';
 import MedicalService from '../admin/MedicalService';
 import HealthWorker from '../admin/HealthWorker';
 import Schedule from '../admin/Schedule';
+import Profile from '../admin/Profile';
 
 
 export const routes = [
@@ -14,6 +16,11 @@ export const routes = [
         name: 'home',
         path: '/',
         component: Home,
+    },
+    {
+        name: 'login',
+        path: '/login',
+        component: Login,
 
     },
     {
@@ -40,6 +47,11 @@ export const routes = [
                 name: 'schedule',
                 path: 'schedule',
                 component: Schedule,
+            },
+            {
+                name: 'profile',
+                path: 'profile',
+                component: Profile,
             }
         ]
     },
@@ -53,12 +65,14 @@ const router = createRouter({
     routes: routes,
 });
 const openRoutes = [
+    'login',
     'home',
     'admin',
     'medicalservice',
     'servicerequest',
     'healthworker',
     'schedule',
+    'profile'
     
 ];
 

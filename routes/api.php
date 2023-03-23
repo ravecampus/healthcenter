@@ -6,6 +6,7 @@ use App\Http\Controllers\MedicalServiceController;
 use App\Http\Controllers\ServiceRequestController;
 use App\Http\Controllers\HealthWorkerController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------

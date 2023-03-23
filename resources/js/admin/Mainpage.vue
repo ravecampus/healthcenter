@@ -45,8 +45,8 @@
                         <li> <a class="waves-effect waves-dark" href="index.html" aria-expanded="false"><i
                                     class="fa fa-tachometer"></i><span class="hide-menu">Dashboard</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-profile.html" aria-expanded="false"><i
-                                    class="fa fa-user-circle-o"></i><span class="hide-menu">Profile</span></a>
+                        <li> <router-link class="waves-effect waves-dark" :to="{name:'profile'}" aria-expanded="false"><i
+                                    class="fa fa-user-circle-o"></i><span class="hide-menu">Profile</span></router-link>
                         </li>
                         <li> <router-link class="waves-effect waves-dark" :to="{name:'medicalservice'}" aria-expanded="false"><i
                                     class="fa fa-gear"></i><span class="hide-menu">Medical Service</span></router-link>
