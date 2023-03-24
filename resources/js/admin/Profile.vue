@@ -21,7 +21,7 @@
                             <!-- <h6 class="card-subtitle">Accoubts Manager Amix corp</h6> -->
                             <div class="row text-center justify-content-md-center">
                                 <div class="col-12">
-                                    <a href="" class="link"><i
+                                    <a href="#" @click="showPassword()" class="link"><i
                                             class="fa fa-lock"></i>
                                         <font class="font-medium"> 
                                             Change Password</font>
@@ -85,7 +85,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-12">
-                                    <button class="btn btn-success">{{ btncap }}</button>
+                                    <button type="button" @click="saveProfile()" class="btn btn-info text-white">{{ btncap }}</button>
                                 </div>
                             </div>
                         </form>
@@ -114,7 +114,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" @click="changePassword()" class="btn btn-primary btn-block" >Save</button>  
+                            <button type="button" @click="changePassword()" class="btn btn-info text-white btn-block" >Save</button>  
                         </div>
                     </div>
                 </div>
@@ -139,6 +139,22 @@ export default {
             this.pass.id = this.post.id;
             $('.change-pass').modal('show');
         },
+        saveProfile(){
+            if(this.post.id > 0){
+                this.$axios.get('sanctum/csrf-cookie').then(response=>{
+                    this.btncap = "Processing...."
+                    this.$axios.put('api/auth/'+this.post.id, this.post).then(res=>{
+                        this.btncap = "Update Profile"
+                        this.$emit('show',{'message':'Profile has been modified!'});
+                        this.errors = [];
+                        this.post = window.Laravel.user;
+                    }).catch(err=>{
+                        this.btncap = "Update Profile"
+                        this.errors = err.response.data.errors
+                    });
+                });
+            }
+        },
         changePassword(){
             this.$axios.get('sanctum/csrf-cookie').then(response=>{
                     // this.btncap = "Saving..."
@@ -154,8 +170,6 @@ export default {
                     });
                 });
         }
-   
-        
     },
     mounted(){
         if(window.Laravel.isLoggedin){

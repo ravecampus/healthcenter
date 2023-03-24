@@ -9,6 +9,7 @@ import MedicalService from '../admin/MedicalService';
 import HealthWorker from '../admin/HealthWorker';
 import Schedule from '../admin/Schedule';
 import Profile from '../admin/Profile';
+import Medicine from '../admin/Medicine';
 
 
 export const routes = [
@@ -52,6 +53,11 @@ export const routes = [
                 name: 'profile',
                 path: 'profile',
                 component: Profile,
+            },
+            {
+                name: 'medicines',
+                path: 'medicines',
+                component: Medicine,
             }
         ]
     },
@@ -72,7 +78,8 @@ const openRoutes = [
     'servicerequest',
     'healthworker',
     'schedule',
-    'profile'
+    'profile',
+    'medicines',
     
 ];
 

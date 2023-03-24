@@ -7,6 +7,7 @@ use App\Http\Controllers\ServiceRequestController;
 use App\Http\Controllers\HealthWorkerController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MedicineController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,7 @@ Route::get('list-health-worker', [HealthWorkerController::class, 'listHealthWork
 Route::resource('health-worker', HealthWorkerController::class);
 Route::resource('medical-service', MedicalServiceController::class);
 Route::resource('service-request', ServiceRequestController::class);
+Route::resource('medicine', MedicineController::class);
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();

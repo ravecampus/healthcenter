@@ -72,7 +72,23 @@ class AuthController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'middle_name' => 'required|string',
+            'position' => 'required',
+            'contact_number' => 'required',
+        ]);
+
+        $user = User::find($id);
+        $user->last_name = $request->last_name;
+        $user->first_name = $request->first_name;
+        $user->middle_name = $request->middle_name;
+        $user->position = $request->position;
+        $user->contact_number = $request->contact_number;
+        $user->save();
+
+        return response()->json($user, 200);
     }
 
     /**

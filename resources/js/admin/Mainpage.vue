@@ -5,12 +5,15 @@
                 <div class="navbar-header">
                     <a class="navbar-brand" href="index.html">
                             <b>
-                            <img src="assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
-                            <img src="assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
+                                <h4 class="dark-logo"><strong>HC</strong> &nbsp;</h4>
+                            <!-- <img src="assets/images/logo-icon.png" alt="homepage" class="dark-logo" /> -->
+                            <!-- <img src="assets/images/logo-light-icon.png" alt="homepage" class="light-logo" /> -->
                         </b>
                         <span>
-                            <img src="assets/images/logo-text.png" alt="homepage" class="dark-logo" />
-                            <img src="assets/images/logo-light-text.png" class="light-logo" alt="homepage" /></span>
+                            <small>Health Center</small>
+                            <!-- <img src="assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+                            <img src="assets/images/logo-light-text.png" class="light-logo" alt="homepage" /> -->
+                        </span>
                     </a>
                 </div>
                 <div class="navbar-collapse">
@@ -29,8 +32,8 @@
                         <li class="nav-item dropdown u-pro">
                             <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href=""
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
-                                    src="assets/images/users/1.jpg" alt="user" class="" /> <span
-                                    class="hidden-md-down">Mark Sanders &nbsp;</span> </a>
+                                    :src="'/profile.png'" alt="user" class="" /> <span
+                                    class="hidden-md-down">{{ user.first_name}} {{ user.last_name }} &nbsp;</span> </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown"></ul>
                         </li>
                     </ul>
@@ -51,6 +54,9 @@
                         <li> <router-link class="waves-effect waves-dark" :to="{name:'medicalservice'}" aria-expanded="false"><i
                                     class="fa fa-gear"></i><span class="hide-menu">Medical Service</span></router-link>
                         </li>
+                        <li> <router-link class="waves-effect waves-dark" :to="{name:'medicines'}" aria-expanded="false"><i
+                                    class="fa fa-gear"></i><span class="hide-menu">Medicines</span></router-link>
+                        </li>
                         <li> <router-link class="waves-effect waves-dark" :to="{name:'healthworker'}" aria-expanded="false"><i
                                     class="fa fa-users"></i><span class="hide-menu">Health Workers</span></router-link>
                         </li>
@@ -63,8 +69,8 @@
                         <li> <a class="waves-effect waves-dark" href="pages-blank.html" aria-expanded="false"><i
                                     class="fa fa-bookmark-o"></i><span class="hide-menu">Blank</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-error-404.html" aria-expanded="false"><i
-                                    class="fa fa-question-circle"></i><span class="hide-menu">404</span></a>
+                        <li> <a class="waves-effect waves-dark" href="#" @click="logout()" aria-expanded="false"><i
+                                    class="fa fa-question-circle"></i><span class="hide-menu">Logout</span></a>
                         </li>
                     </ul>
                     <div class="text-center mt-4">
@@ -96,6 +102,8 @@ export default {
         return{
             message:"",
             status:0,
+            user:{},
+            title:""
         }
     },
     methods:{
@@ -124,7 +132,11 @@ export default {
         },
     },
     mounted(){
-
+        this.title = window.Title.app_name;
+        if(window.Laravel.isLoggedin){
+            let user = window.Laravel.user;
+            this.user = user;
+        }
     }
 }
 </script>
