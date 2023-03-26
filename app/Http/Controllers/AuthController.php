@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Session;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -38,7 +39,49 @@ class AuthController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'middle_name' => 'required|string',
+            'age' => 'required',
+            'gender' => 'required',
+            'birthdate' => 'required',
+            'birth_place' => 'required',
+            'civil_status' => 'required',
+            'purok' => 'required|string',
+            'occupation' => 'required|string',
+            'contact_number' => 'required',
+            'email' => 'required|string|email|unique:users,email',
+            'username' => 'required|unique:users,username',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        $user = User::create([
+            'last_name' => $request->last_name,
+            'first_name' => $request->first_name,
+            'middle_name' => $request->middle_name,
+            'age' => $request->age,
+            'gender' => $request->gender,
+            'birthdate' => Carbon::parse($request->birthdate)->format('Y-m-d'),
+            'birth_place' => $request->birth_place,
+            'civil_status' => $request->civil_status,
+            'contact_number' => $request->contact_number,
+            'purok' => $request->purok,
+            'occupation' => $request->occupation,
+            'email' => $request->email,
+            'username' => $request->username,
+            'password' => bcrypt($request->password),
+        ]);
+
+        // if(isset($user)){
+        //     $auth = Auth::id();
+        //     TransactionLog::create([
+        //     'user_id'=>$auth,
+        //     'event'=>'Register',
+        //     'data' => 'has been Register!'
+        //      ]);
+        // }
+        return response()->json($user, 200);
     }
 
     /**

@@ -22,6 +22,9 @@
                     <div class="card-body">
                         <h4 class="card-title">List of Items</h4>
                         <h6 class="card-subtitle"></h6>
+                        <div class="col-6"> 
+                            <input type="text" class="form-control" v-model="tableData.search" @input="listOfHWorker()" placeholder="Search...">
+                        </div>
                         <div class="table-responsive">
                             <data-table class="mt-2" :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
                                 <tbody>

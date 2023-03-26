@@ -12,9 +12,22 @@ class MedicineController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $columns = ['medicine_name','created_at'];
+        $length = $request->length;
+        $column = $request->column;
+        $dir = $request->dir;
+        $searchValue = $request->search;
+        $query = Medicine::orderBy('medicine_name', 'asc');
+    
+        if($searchValue){
+            $query->where(function($query) use ($searchValue){
+                $query->where('medicine_name', 'like', '%'.$searchValue.'%');
+            });
+        }
+        $projects = $query->paginate($length);
+        return ['data'=>$projects, 'draw'=> $request->draw];
     }
 
     /**
@@ -77,7 +90,16 @@ class MedicineController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'medicine_name' => 'required|string',
+            'medicine_type' => 'required',
+        ]);
+        $med = Medicine::find($id);
+        $med->medicine_name = $request->medicine_name;
+        $med->medicine_type = $request->medicine_type;
+        $med->save();
+
+        return response()->json($med, 200);
     }
 
     /**

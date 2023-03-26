@@ -54,8 +54,9 @@
                         <button type="button" class="btn btn-info text-white btn-lg"
                         :disabled="btndis" @click="login()"
                         style="padding-left: 2.5rem; padding-right: 2.5rem;">{{ btncap }}</button>
-                        <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="#!"
-                            class="link-danger">Register</a></p>
+                        <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? 
+                            <router-link :to="{name:'signup'}"
+                            class="link-danger">Register</router-link></p>
                     </div>
 
                     </form>

@@ -164,4 +164,10 @@ class ScheduleController extends Controller
         $sched->save();
         return response()->json($sched, 200);
     }
+
+
+    public function listOfSchedule(){
+        $sched = Schedule::with('healthworker')->where('visible', 1)->get();
+        return response()->json($sched, 200);
+    }
 }

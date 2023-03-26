@@ -2,6 +2,7 @@ import {createWebHistory, createRouter} from "vue-router";
 
 import Home from '../page/Home';
 import Login from '../page/Login';
+import Signup from '../page/Signup';
 
 import Admin from '../admin/Mainpage';
 import ServiceRequest from '../admin/ServiceRequest';
@@ -10,6 +11,11 @@ import HealthWorker from '../admin/HealthWorker';
 import Schedule from '../admin/Schedule';
 import Profile from '../admin/Profile';
 import Medicine from '../admin/Medicine';
+
+import User from '../user/Mainpage';
+import UserProfile from '../user/Profile';
+import UserRequest from '../user/Request';
+
 
 
 export const routes = [
@@ -22,6 +28,30 @@ export const routes = [
         name: 'login',
         path: '/login',
         component: Login,
+
+    },
+    {
+        name: 'signup',
+        path: '/signup',
+        component: Signup,
+
+    },
+    {
+        name: 'user',
+        path: '/user',
+        component: User,
+        children:[
+            {
+                name: 'userprofile',
+                path: 'profile',
+                component: UserProfile,
+            },
+            {
+                name: 'userrequest',
+                path: 'request',
+                component: UserRequest,
+            }
+        ]
 
     },
     {
@@ -80,6 +110,10 @@ const openRoutes = [
     'schedule',
     'profile',
     'medicines',
+    'signup',
+    'user',
+    'userprofile',
+    'userrequest',
     
 ];
 

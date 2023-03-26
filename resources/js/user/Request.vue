@@ -3,20 +3,53 @@
             
         <div class="row page-titles">
             <div class="col-md-5 align-self-center">
-                <h3 class="text-themecolor">Medicines</h3>
-                <!-- <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                    <li class="breadcrumb-item active">Blank Page</li>
-                </ol> -->
+                <h3 class="text-themecolor">Request Medication</h3>
             </div>
             <div class="col-md-7 align-self-center">
-                <button type="button" @click="showModal()" class="btn waves-effect waves-light btn btn-info pull-right hidden-sm-down text-white">
+                <!-- <button type="button" @click="showModal()" class="btn waves-effect waves-light btn btn-info pull-right hidden-sm-down text-white">
                     <i class="fa fa-plus"></i> Add Item
-                </button>
+                </button> -->
             </div>
         </div>
     
         <div class="row">
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group col-6">
+                            <label for="example-email" class="col-md-12">Medical Service</label>
+                            <div class="col-md-12">
+                                <select class="form-control" v-model="post.medical_service">
+                                    <option v-for="(ls, idx) in medical_services" :key="idx" :value="ls.id">{{ ls.description }}</option>
+                                </select>
+                            </div>
+
+                            <span class="errors-material" v-if="errors.medical_service">{{errors.medical_service[0]}}</span>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="example-email" class="col-md-12">Schedule</label>
+                            <!-- <div class="col-md-12">
+                                <select class="form-control" v-model="post.medical_service">
+                                    <option v-for="(ls, idx) in medical_services" :key="idx" :value="ls.id">{{ ls.description }}</option>
+                                </select>
+                            </div> -->
+                            <table class="table table-stripped">
+                                <tbody>
+                                    <tr v-for="(ls, idx) in schedules" :key="idx">
+                                        <td></td>
+                                        <td>{{ extractTime(ls.start_time) }} - {{  extractTime(ls.end_time)}} | {{ xtractDay(ls.day) }}</td>
+                                        <td> {{ ls.healthworker.first_name}} {{ ls.healthworker.last_name }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <span class="errors-material" v-if="errors.medical_service">{{errors.medical_service[0]}}</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
             <div class="col-12">
                 <div class="card shadow-sm">
                     <div class="card-body">
@@ -136,7 +169,9 @@ export default {
             btncap:"Save",
             post:{},
             errors:[],
+            medical_services:[],
             medicines:[],
+            schedules:[],
             columns:columns,
             sortOrders:sortOrders,
             sortKey:'created_at',
@@ -163,6 +198,59 @@ export default {
         }
     },
     methods: {
+        listMedicalService(){
+           this.$axios.get('sanctum/csrf-cookie').then(response=>{
+               this.$axios.get('api/medical-service').then(res=>{
+                   this.medical_services = res.data;
+               })
+           });
+       },
+        lisOfSchedule(){
+           this.$axios.get('sanctum/csrf-cookie').then(response=>{
+               this.$axios.get('api/list-schedule').then(res=>{
+                   this.schedules = res.data;
+               })
+           });
+       },
+        extractTime(time){
+          // Check correct time format and split into components
+            time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+
+            if (time.length > 1) { // If time format correct
+                time = time.slice (1);  // Remove full string match value
+                time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
+                time[0] = +time[0] % 12 || 12; // Adjust hours
+            }
+            return time.join (''); // return adjusted time or original string
+        },
+        xtractDay(data){
+            let data_ = JSON.parse(data);
+            let txt = "";
+            data_.sort((a, b) => a - b);
+            data_.forEach(val=>{
+                if(val == 1){
+                    txt += "M";
+                }
+                if(val==2){
+                    txt += "T";
+                }
+                if(val==3){
+                    txt += "W";
+                }
+                if(val==4){
+                    txt += "TH";
+                }
+                if(val==5){
+                    txt += "F";
+                }
+                if(val==6){
+                    txt += "S";
+                }
+            });
+
+            return txt;
+        },
+
        showModal(){
            this.post = {};
            this.errors = [];
@@ -255,6 +343,8 @@ export default {
     },
     mounted() {
         this.listOfItem();
+        this.listMedicalService();
+        this.lisOfSchedule();
     },
 }
 </script>
