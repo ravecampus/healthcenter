@@ -16,35 +16,58 @@
 
             <div class="col-12">
                 <div class="card">
-                    <div class="card-body">
-                        <div class="form-group col-6">
-                            <label for="example-email" class="col-md-12">Medical Service</label>
-                            <div class="col-md-12">
-                                <select class="form-control" v-model="post.medical_service">
-                                    <option v-for="(ls, idx) in medical_services" :key="idx" :value="ls.id">{{ ls.description }}</option>
-                                </select>
-                            </div>
+                    <div class="card-body row">
+                         <div class="col-6">
+                            <div class="form-group">
+                                <label for="example-email" class="col-md-12">Medical Service</label>
+                                <div class="col-md-12">
+                                    <select class="form-control" v-model="post.medical_service">
+                                        <option v-for="(ls, idx) in medical_services" :key="idx" :value="ls.id">{{ ls.description }}</option>
+                                    </select>
+                                </div>
 
-                            <span class="errors-material" v-if="errors.medical_service">{{errors.medical_service[0]}}</span>
+                                <span class="errors-material" v-if="errors.medical_service">{{errors.medical_service[0]}}</span>
+                            </div>
+                      
+                            <div class="form-group">
+                                <label for="example-email" class="col-md-12">Schedule</label>
+                                <table class="table table-sm table-striped">
+                                    <tbody>
+                                        <tr v-for="(ls, idx) in schedules" :key="idx">
+                                            <td>
+                                                <!-- <div class="form-group"> -->
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" v-model="post.schedule" :value="ls.id" :id="'schd'+ls.id">
+                                                        <label class="form-check-label" :for="'schd'+ls.id">
+                                                        </label>
+                                                    </div>
+                                                <!-- </div> -->
+                                            </td>
+                                            <td>{{ extractTime(ls.start_time) }} - {{  extractTime(ls.end_time)}} | {{ xtractDay(ls.day) }}</td>
+                                            <td> {{ ls.healthworker.first_name}} {{ ls.healthworker.last_name }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <span class="errors-material" v-if="errors.medical_service">{{errors.medical_service[0]}}</span>
+                            </div>
                         </div>
-                        <div class="form-group col-6">
-                            <label for="example-email" class="col-md-12">Schedule</label>
-                            <!-- <div class="col-md-12">
-                                <select class="form-control" v-model="post.medical_service">
-                                    <option v-for="(ls, idx) in medical_services" :key="idx" :value="ls.id">{{ ls.description }}</option>
-                                </select>
-                            </div> -->
-                            <table class="table table-stripped">
-                                <tbody>
-                                    <tr v-for="(ls, idx) in schedules" :key="idx">
-                                        <td></td>
-                                        <td>{{ extractTime(ls.start_time) }} - {{  extractTime(ls.end_time)}} | {{ xtractDay(ls.day) }}</td>
-                                        <td> {{ ls.healthworker.first_name}} {{ ls.healthworker.last_name }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <span class="errors-material" v-if="errors.medical_service">{{errors.medical_service[0]}}</span>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="example-email" class="col-md-12">Message</label>
+                                <div class="col-md-12">
+                                    <textarea class="form-control" v-model="post.message" rows="5">
+
+                                    </textarea>
+                                </div>
+
+                                <span class="errors-material" v-if="errors.medical_service">{{errors.medical_service[0]}}</span>
+                            </div>
+                            <button type="button" class="btn btn-info text-white" @click="sendRequest()">
+                                <i class="fa fa-send"></i>
+                                Send
+                            </button>
                         </div>
+                        
                         
                     </div>
                 </div>
@@ -170,7 +193,7 @@ export default {
             post:{},
             errors:[],
             medical_services:[],
-            medicines:[],
+            request_sevices:[],
             schedules:[],
             columns:columns,
             sortOrders:sortOrders,
@@ -260,45 +283,29 @@ export default {
            this.post = data;
            $('.item').modal('show');           
        },
-       saveItem(){
-        if(this.post.id > 0){
+       sendRequest(){
             this.$axios.get('sanctum/csrf-cookie').then(response=>{
-               this.btncap = "Saving...";
-               this.$axios.put('api/medicine/'+this.post.id, this.post).then(res=>{
-                   this.btncap = "Save";
-                   this.$emit('show',{'message':'Medicine has been modified!'});
+               this.btncap = "Sending...";
+               this.$axios.post('api/service-request', this.post).then(res=>{
+                   this.btncap = "Send";
                    this.post = {};
+                   this.$emit('show',{'message':'Service Request sent!'});
                    this.listOfItem();
-                   $('.item').modal('hide');
+                //    $('.item').modal('hide');
                }).catch(err=>{
-                   this.btncap = "Save";
+                   this.btncap = "Send";
                    this.errors = err.response.data.errors;
                });
            });
-        }else{
-            this.$axios.get('sanctum/csrf-cookie').then(response=>{
-               this.btncap = "Saving...";
-               this.$axios.post('api/medicine', this.post).then(res=>{
-                   this.btncap = "Save";
-                   this.post = {};
-                   this.$emit('show',{'message':'Medicine has been saved!'});
-                   this.listOfItem();
-                   $('.item').modal('hide');
-               }).catch(err=>{
-                   this.btncap = "Save";
-                   this.errors = err.response.data.errors;
-               });
-           });
-        }
-          
+       
        },
-        listOfItem(urls='api/medicine'){
+        listOfItem(urls='api/service-request'){
             this.$axios.get('sanctum/csrf-cookie').then(response => {
                 this.tableData.draw ++;
                 this.$axios.get(urls,{params:this.tableData}).then(res=>{
                 let data = res.data;
                     if(this.tableData.draw == data.draw){
-                        this.medicines = data.data.data;
+                        this.request_sevices = data.data.data;
                         this.configPagination(data.data);
                     }else{
                         this.not_found = true;

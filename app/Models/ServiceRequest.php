@@ -10,4 +10,11 @@ class ServiceRequest extends Model
     use HasFactory;
 
     protected $table = 'service_request';
+    protected $fillable = [
+        'medical_service_id', 
+        'schedule_id', 
+        'user_id', 
+        'message',
+        'status',
+    ];
 }

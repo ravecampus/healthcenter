@@ -260,29 +260,31 @@ export default {
         this.post.days = JSON.stringify(this.post.day);
         if(this.post.id > 0){
             this.$axios.get('sanctum/csrf-cookie').then(response=>{
-               this.btncap = "Saving...";
-               this.$axios.put('api/schedule/'+this.post.id, this.post).then(res=>{
-                   this.btncap = "Save";
-                   this.$emit('show',{'message':'Medical Service has been modified!'});
-                   this.post = {};
-                   this.listOfSchedule();
-               }).catch(err=>{
-                   this.btncap = "Save";
-                   this.errors = err.response.data.errors;
-               });
+                this.btncap = "Saving...";
+                this.$axios.put('api/schedule/'+this.post.id, this.post).then(res=>{
+                    this.btncap = "Save";
+                    this.$emit('show',{'message':'Medical Service has been modified!'});
+                    this.post = {};
+                    this.errors = [];
+                    this.listOfSchedule();
+                }).catch(err=>{
+                    this.btncap = "Save";
+                    this.errors = err.response.data.errors;
+                });
            });
         }else{
             this.$axios.get('sanctum/csrf-cookie').then(response=>{
-               this.btncap = "Saving...";
-               this.$axios.post('api/schedule', this.post).then(res=>{
-                   this.btncap = "Save";
-                   this.post = {};
-                   this.$emit('show',{'message':'Schedule has been saved!'});
-                   this.listOfSchedule();
-               }).catch(err=>{
-                   this.btncap = "Save";
-                   this.errors = err.response.data.errors;
-               });
+                this.btncap = "Saving...";
+                this.$axios.post('api/schedule', this.post).then(res=>{
+                    this.btncap = "Save";
+                    this.post = {};
+                    this.errors = [];
+                    this.$emit('show',{'message':'Schedule has been saved!'});
+                    this.listOfSchedule();
+                }).catch(err=>{
+                    this.btncap = "Save";
+                    this.errors = err.response.data.errors;
+                });
            });
         }
           

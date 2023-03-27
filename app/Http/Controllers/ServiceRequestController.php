@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ServiceRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ServiceRequestController extends Controller
 {
@@ -35,7 +36,22 @@ class ServiceRequestController extends Controller
      */
     public function store(Request $request)
     {
-       
+       $request->validate([
+           'schedule' => 'required',
+           'medical_sevice' => 'required',
+           'user_id' => 'required',
+           'message' => 'required|string',
+           ]);
+
+        $service = ServiceRequest::create([
+            'schedule_id' => $request->schedule,
+            'medical_sevice_id' => $request->medical_service,
+            'user_id' => Auth::id(),
+            'message' => $request->message,
+            // 'status' => ,
+            ]);
+        
+        return response()->json($service, 200);
 
     }
 
