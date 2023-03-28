@@ -3,7 +3,7 @@
             
         <div class="row page-titles">
             <div class="col-md-5 align-self-center">
-                <h3 class="text-themecolor">Request Medication</h3>
+                <h3 class="text-themecolor">Request Service</h3>
             </div>
             <div class="col-md-7 align-self-center">
                 <!-- <button type="button" @click="showModal()" class="btn waves-effect waves-light btn btn-info pull-right hidden-sm-down text-white">
@@ -48,23 +48,23 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <span class="errors-material" v-if="errors.medical_service">{{errors.medical_service[0]}}</span>
+                                <span class="errors-material" v-if="errors.schedule">{{errors.schedule[0]}}</span>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="example-email" class="col-md-12">Message</label>
                                 <div class="col-md-12">
-                                    <textarea class="form-control" v-model="post.message" rows="5">
+                                    <textarea class="form-control" v-model="post.message" rows="5" placeholder="Optional...">
 
                                     </textarea>
                                 </div>
 
-                                <span class="errors-material" v-if="errors.medical_service">{{errors.medical_service[0]}}</span>
+                                <span class="errors-material" v-if="errors.message">{{errors.message[0]}}</span>
                             </div>
                             <button type="button" class="btn btn-info text-white" @click="sendRequest()">
                                 <i class="fa fa-send"></i>
-                                Send
+                                {{btncap}}
                             </button>
                         </div>
                         
@@ -78,30 +78,34 @@
                     <div class="card-body">
                         <h4 class="card-title">List of Items</h4>
                         <h6 class="card-subtitle"></h6>
-                        <div class="col-6"> 
+                        <!-- <div class="col-6"> 
                             <input type="text" class="form-control" v-model="tableData.search" @input="listOfItem()" placeholder="Search...">
-                        </div>
+                        </div> -->
                         <div class="table-responsive">
                             <data-table class="mt-2" :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
                                 <tbody>
-                                    <tr class="tr-shadow" v-for="(list, idx) in medicines" :key="idx">
+                                    <tr class="tr-shadow" v-for="(list, idx) in request_sevices" :key="idx">
                                         <td class="text-info">
                                             <strong>
-                                            {{ list.medicine_name }}
+                                            {{ list.medical_service.description }}
                                             </strong>
                                         </td>
-                                        <td>{{ extractMedicineType(list.medicine_type) }}</td>
+                                        <td>{{extractTime(list.schedule.start_time) }} - {{ extractTime(list.schedule.end_time) }} |  {{xtractDay(list.schedule.day)}}</td>
+                                        <td>{{ list.status }}</td>
                                         <td>
-                                            <div class="table-data-feature">
+                                            <div class="btn-group">
                                                 <button class="btn btn-info text-white btn-sm" data-toggle="tooltip" @click="editModal(list)" title="Edit">
-                                                    <i class="fa fa-pencil"></i> Edit
+                                                    <i class="fa fa-times"></i> Cancel
+                                                </button>
+                                                 <button class="btn btn-info text-white btn-sm" data-toggle="tooltip" @click="editModal(list)" title="Edit">
+                                                    <i class="fa fa-eye"></i> View
                                                 </button>
                                                 
                                             </div>
                                         </td>
                                     </tr>
                                     <tr> 
-                                        <td colspan="4" v-show="!noData(medicines)">
+                                        <td colspan="4" v-show="!noData(request_sevices)">
                                             No Result Found!
                                         </td>
                                     </tr>
@@ -112,7 +116,7 @@
                                 <pagination :pagination="pagination"
                                     @prev="listOfItem(pagination.prevPageUrl)"
                                     @next="listOfItem(pagination.nextPageUrl)"
-                                    v-show="noData(medicines)">
+                                    v-show="noData(request_sevices)">
                                 </pagination>
                             </div>
 
@@ -180,9 +184,10 @@ export default {
 
         let sortOrders = {};
         let columns =[
-        {label:'MEDICINE NAME', name:null},
-        {label:'MEDICINE TYPE', name:null},
-        {label:'Action', name:null},
+        {label:'MEDICAL SERVICE', name:null},
+        {label:'SCHEDULE', name:null},
+        {label:'STATUS', name:null},
+        {label:'ACTION', name:null},
         ];
         
         columns.forEach(column=>{
@@ -198,6 +203,7 @@ export default {
             columns:columns,
             sortOrders:sortOrders,
             sortKey:'created_at',
+
             tableData:{
                 draw:0,
                 length:10,
@@ -299,7 +305,7 @@ export default {
            });
        
        },
-        listOfItem(urls='api/service-request'){
+        listOfItem(urls='api/service-request-auth'){
             this.$axios.get('sanctum/csrf-cookie').then(response => {
                 this.tableData.draw ++;
                 this.$axios.get(urls,{params:this.tableData}).then(res=>{

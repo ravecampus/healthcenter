@@ -38,14 +38,14 @@ class ServiceRequestController extends Controller
     {
        $request->validate([
            'schedule' => 'required',
-           'medical_sevice' => 'required',
-           'user_id' => 'required',
-           'message' => 'required|string',
+           'medical_service' => 'required',
+        //    'user_id' => 'required',
+        //    'message' => 'required|string',
            ]);
 
         $service = ServiceRequest::create([
             'schedule_id' => $request->schedule,
-            'medical_sevice_id' => $request->medical_service,
+            'medical_service_id' => $request->medical_service,
             'user_id' => Auth::id(),
             'message' => $request->message,
             // 'status' => ,
@@ -98,5 +98,20 @@ class ServiceRequestController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function authRequest(Request $request){
+    
+        $length = $request->length;
+        $searchValue = $request->search;
+        $query = ServiceRequest::with('schedule', 'medical_service')->orderBy('created_at', 'desc');
+    
+        if($searchValue){
+            $query->where(function($query) use ($searchValue){
+                // $query->where('medicine_name', 'like', '%'.$searchValue.'%');
+            });
+        }
+        $projects = $query->paginate($length);
+        return ['data'=>$projects, 'draw'=> $request->draw];
     }
 }

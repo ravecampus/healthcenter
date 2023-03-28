@@ -32,6 +32,7 @@ Route::resource('schedule', ScheduleController::class);
 Route::get('list-health-worker', [HealthWorkerController::class, 'listHealthWorker']);
 Route::resource('health-worker', HealthWorkerController::class);
 Route::resource('medical-service', MedicalServiceController::class);
+Route::get('service-request-auth', [ServiceRequestController::class,'authRequest']);
 Route::resource('service-request', ServiceRequestController::class);
 Route::resource('medicine', MedicineController::class);
 

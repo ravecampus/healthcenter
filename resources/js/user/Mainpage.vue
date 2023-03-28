@@ -54,7 +54,7 @@
                         <li> <router-link class="waves-effect waves-dark" :to="{name:'userrequest'}" aria-expanded="false"><i
                                     class="fa fa-send"></i><span class="hide-menu">Request</span></router-link>
                         </li>
-                        <li> <router-link class="waves-effect waves-dark" :to="{name:'medicines'}" aria-expanded="false"><i
+                        <!-- <li> <router-link class="waves-effect waves-dark" :to="{name:'medicines'}" aria-expanded="false"><i
                                     class="fa fa-gear"></i><span class="hide-menu">Medicines</span></router-link>
                         </li>
                         <li> <router-link class="waves-effect waves-dark" :to="{name:'healthworker'}" aria-expanded="false"><i
@@ -71,7 +71,7 @@
                         </li>
                         <li> <a class="waves-effect waves-dark" href="#" @click="logout()" aria-expanded="false"><i
                                     class="fa fa-question-circle"></i><span class="hide-menu">Logout</span></a>
-                        </li>
+                        </li> -->
                     </ul>
                     <div class="text-center mt-4">
                         <a href="https://www.wrappixel.com/templates/adminwrap/"

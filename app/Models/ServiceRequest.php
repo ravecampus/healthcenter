@@ -17,4 +17,11 @@ class ServiceRequest extends Model
         'message',
         'status',
     ];
+
+    public function schedule(){
+        return $this->hasOne(Schedule::class, 'id', 'schedule_id');
+    }
+    public function medical_service(){
+        return $this->hasOne(MedicalService::class, 'id', 'medical_service_id');
+    }
 }
