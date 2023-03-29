@@ -73,10 +73,7 @@
                                     class="fa fa-question-circle"></i><span class="hide-menu">Logout</span></a>
                         </li> -->
                     </ul>
-                    <div class="text-center mt-4">
-                        <a href="https://www.wrappixel.com/templates/adminwrap/"
-                            class="btn waves-effect waves-light btn-info hidden-md-down text-white"> Upgrade to Pro</a>
-                    </div>
+                    
                 </nav>
             </div>
             
@@ -85,7 +82,7 @@
         <div class="page-wrapper">
             <router-view @show="flashMessage"></router-view>
 
-            <footer class="footer"> © 2021 Adminwrap by <a href="https://www.wrappixel.com/">wrappixel.com</a> </footer>
+            <footer class="footer"> © 2023 winsdev<a href="#"></a> </footer>
 
         </div>
     </div>

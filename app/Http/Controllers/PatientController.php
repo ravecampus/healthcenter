@@ -3,26 +3,30 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ServiceRequest;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
-class ServiceRequestController extends Controller
+class PatientController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        
+        $columns = ['last_name','created_at'];
         $length = $request->length;
+        $column = $request->column;
+        $dir = $request->dir;
         $searchValue = $request->search;
-        $query = ServiceRequest::with('schedule', 'medical_service')->orderBy('created_at', 'desc');
+        $query = User::where('role',0)->orderBy('last_name', 'asc');
     
         if($searchValue){
             $query->where(function($query) use ($searchValue){
-                // $query->where('medicine_name', 'like', '%'.$searchValue.'%');
+                $query->where('last_name', 'like', '%'.$searchValue.'%')
+                ->orWhere('middle_name', 'like', '%'.$searchValue.'%')
+                ->orWhere('first_name', 'like', '%'.$searchValue.'%')
+                ->orWhere('contact_number', 'like', '%'.$searchValue.'%');
             });
         }
         $projects = $query->paginate($length);
@@ -47,23 +51,7 @@ class ServiceRequestController extends Controller
      */
     public function store(Request $request)
     {
-       $request->validate([
-           'schedule' => 'required',
-           'medical_service' => 'required',
-        //    'user_id' => 'required',
-        //    'message' => 'required|string',
-           ]);
-
-        $service = ServiceRequest::create([
-            'schedule_id' => $request->schedule,
-            'medical_service_id' => $request->medical_service,
-            'user_id' => Auth::id(),
-            'message' => $request->message,
-            // 'status' => ,
-            ]);
-        
-        return response()->json($service, 200);
-
+        //
     }
 
     /**
@@ -109,20 +97,5 @@ class ServiceRequestController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function authRequest(Request $request){
-    
-        $length = $request->length;
-        $searchValue = $request->search;
-        $query = ServiceRequest::with('schedule', 'medical_service')->orderBy('created_at', 'desc');
-    
-        if($searchValue){
-            $query->where(function($query) use ($searchValue){
-                // $query->where('medicine_name', 'like', '%'.$searchValue.'%');
-            });
-        }
-        $projects = $query->paginate($length);
-        return ['data'=>$projects, 'draw'=> $request->draw];
     }
 }

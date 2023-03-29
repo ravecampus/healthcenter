@@ -52,14 +52,13 @@
                                     <tr class="spacer"></tr>
                                 </tbody>
                             </data-table>
-                            <div>
-                                <pagination :pagination="pagination"
-                                    @prev="listOfItem(pagination.prevPageUrl)"
-                                    @next="listOfItem(pagination.nextPageUrl)"
-                                    v-show="noData(medicines)">
-                                </pagination>
-                            </div>
-
+                        </div>
+                        <div>
+                            <pagination :pagination="pagination"
+                                @prev="listOfItem(pagination.prevPageUrl)"
+                                @next="listOfItem(pagination.nextPageUrl)"
+                                v-show="noData(medicines)">
+                            </pagination>
                         </div>
                     </div>
                 </div>

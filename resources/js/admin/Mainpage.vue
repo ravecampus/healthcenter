@@ -55,7 +55,7 @@
                                     class="fa fa-gear"></i><span class="hide-menu">Medical Service</span></router-link>
                         </li>
                         <li> <router-link class="waves-effect waves-dark" :to="{name:'medicines'}" aria-expanded="false"><i
-                                    class="fa fa-gear"></i><span class="hide-menu">Medicines</span></router-link>
+                                    class="fa fa-medkit"></i><span class="hide-menu">Medicines</span></router-link>
                         </li>
                         <li> <router-link class="waves-effect waves-dark" :to="{name:'healthworker'}" aria-expanded="false"><i
                                     class="fa fa-users"></i><span class="hide-menu">Health Workers</span></router-link>
@@ -63,20 +63,19 @@
                         <li> <router-link class="waves-effect waves-dark" :to="{name:'schedule'}" aria-expanded="false"><i
                                     class="fa fa-calendar"></i><span class="hide-menu">Schedule</span></router-link>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="map-google.html" aria-expanded="false"><i
-                                    class="fa fa-globe"></i><span class="hide-menu">Map</span></a>
+                        <li> 
+                            <router-link class="waves-effect waves-dark" :to="{name:'patients'}" aria-expanded="false">
+                                <i class="fa fa-users"></i><span class="hide-menu">Patients</span>
+                            </router-link>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="pages-blank.html" aria-expanded="false"><i
-                                    class="fa fa-bookmark-o"></i><span class="hide-menu">Blank</span></a>
+                                    class="fa fa-user-md"></i><span class="hide-menu">Blank</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="#" @click="logout()" aria-expanded="false"><i
                                     class="fa fa-question-circle"></i><span class="hide-menu">Logout</span></a>
                         </li>
                     </ul>
-                    <div class="text-center mt-4">
-                        <a href="https://www.wrappixel.com/templates/adminwrap/"
-                            class="btn waves-effect waves-light btn-info hidden-md-down text-white"> Upgrade to Pro</a>
-                    </div>
+                    
                 </nav>
             </div>
             
@@ -85,7 +84,7 @@
         <div class="page-wrapper">
             <router-view @show="flashMessage"></router-view>
 
-            <footer class="footer"> © 2021 Adminwrap by <a href="https://www.wrappixel.com/">wrappixel.com</a> </footer>
+            <footer class="footer"> © 2023 winsdev <a href="#"></a> </footer>
 
         </div>
     </div>

@@ -5,12 +5,15 @@
                 <div class="navbar-header">
                     <a class="navbar-brand" href="index.html">
                             <b>
-                            <img src="assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
-                            <img src="assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
+                                <h4 class="dark-logo"><strong>HC</strong> &nbsp;</h4>
+                            <!-- <img src="assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+                            <img src="assets/images/logo-light-icon.png" alt="homepage" class="light-logo" /> -->
                         </b>
                         <span>
-                            <img src="assets/images/logo-text.png" alt="homepage" class="dark-logo" />
-                            <img src="assets/images/logo-light-text.png" class="light-logo" alt="homepage" /></span>
+                              <small>Health Center</small>
+                            <!-- <img src="assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+                            <img src="assets/images/logo-light-text.png" class="light-logo" alt="homepage" /> -->
+                        </span>
                     </a>
                 </div>
                 <div class="navbar-collapse">
@@ -27,10 +30,11 @@
                     </ul>
                     <ul class="navbar-nav my-lg-0">
                         <li class="nav-item dropdown u-pro">
-                            <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href=""
+                            <!-- <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href=""
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
                                     src="assets/images/users/1.jpg" alt="user" class="" /> <span
-                                    class="hidden-md-down">Mark Sanders &nbsp;</span> </a>
+                                    class="hidden-md-down">Mark Sanders &nbsp;</span> 
+                            </a> -->
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown"></ul>
                         </li>
                     </ul>
@@ -42,13 +46,16 @@
             <div class="scroll-sidebar">
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-                        <li> <a class="waves-effect waves-dark" href="index.html" aria-expanded="false"><i
-                                    class="fa fa-tachometer"></i><span class="hide-menu">Dashboard</span></a>
+                        <li> <router-link class="waves-effect waves-dark" :to="{name:'login'}" aria-expanded="false">
+                                <i class="fa fa-tachometer"></i><span class="hide-menu">Login</span>
+                            </router-link>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-profile.html" aria-expanded="false"><i
-                                    class="fa fa-user-circle-o"></i><span class="hide-menu">Profile</span></a>
+                        <li> 
+                            <router-link class="waves-effect waves-dark" :to="{name:'signup'}" aria-expanded="false">
+                                <i class="fa fa-user-circle-o"></i><span class="hide-menu">Register</span>
+                            </router-link>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="table-basic.html" aria-expanded="false"><i
+                        <!-- <li> <a class="waves-effect waves-dark" href="table-basic.html" aria-expanded="false"><i
                                     class="fa fa-table"></i><span class="hide-menu">Tables</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="icon-fontawesome.html" aria-expanded="false"><i
@@ -62,12 +69,12 @@
                         </li>
                         <li> <a class="waves-effect waves-dark" href="pages-error-404.html" aria-expanded="false"><i
                                     class="fa fa-question-circle"></i><span class="hide-menu">404</span></a>
-                        </li>
+                        </li> -->
                     </ul>
-                    <div class="text-center mt-4">
+                    <!-- <div class="text-center mt-4">
                         <a href="https://www.wrappixel.com/templates/adminwrap/"
                             class="btn waves-effect waves-light btn-info hidden-md-down text-white"> Upgrade to Pro</a>
-                    </div>
+                    </div> -->
                 </nav>
             </div>
             
@@ -176,7 +183,7 @@
 
             </div>
 
-            <footer class="footer"> © 2021 Adminwrap by <a href="https://www.wrappixel.com/">wrappixel.com</a> </footer>
+            <footer class="footer"> © 2023 winsdev <a href="#"></a> </footer>
 
         </div>
     </div>

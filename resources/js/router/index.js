@@ -11,6 +11,7 @@ import HealthWorker from '../admin/HealthWorker';
 import Schedule from '../admin/Schedule';
 import Profile from '../admin/Profile';
 import Medicine from '../admin/Medicine';
+import Patient from '../admin/Patient';
 
 import User from '../user/Mainpage';
 import UserProfile from '../user/Profile';
@@ -88,7 +89,13 @@ export const routes = [
                 name: 'medicines',
                 path: 'medicines',
                 component: Medicine,
+            },
+            {
+                name: 'patients',
+                path: 'patients',
+                component: Patient,
             }
+
         ]
     },
   
@@ -114,6 +121,7 @@ const openRoutes = [
     'user',
     'userprofile',
     'userrequest',
+    'patients',
     
 ];
 
