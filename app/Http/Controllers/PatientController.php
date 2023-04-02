@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Carbon\Carbon;
 
 class PatientController extends Controller
 {
@@ -51,7 +52,41 @@ class PatientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'middle_name' => 'required|string',
+            'age' => 'required',
+            'gender' => 'required',
+            'birthdate' => 'required',
+            'birth_place' => 'required',
+            'civil_status' => 'required',
+            'purok' => 'required|string',
+            'occupation' => 'required|string',
+            'contact_number' => 'required',
+            'email' => 'required|string|email|unique:users,email',
+            'username' => 'required|unique:users,username',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        $user = User::create([
+            'last_name' => $request->last_name,
+            'first_name' => $request->first_name,
+            'middle_name' => $request->middle_name,
+            'age' => $request->age,
+            'gender' => $request->gender,
+            'birthdate' => Carbon::parse($request->birthdate)->format('Y-m-d'),
+            'birth_place' => $request->birth_place,
+            'civil_status' => $request->civil_status,
+            'contact_number' => $request->contact_number,
+            'purok' => $request->purok,
+            'occupation' => $request->occupation,
+            'email' => $request->email,
+            'username' => $request->username,
+            'password' => bcrypt($request->password),
+        ]);
+
+        return response()->json($user, 200);
     }
 
     /**
@@ -85,7 +120,41 @@ class PatientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'middle_name' => 'required|string',
+            'age' => 'required',
+            'gender' => 'required',
+            'birthdate' => 'required',
+            'birth_place' => 'required',
+            'civil_status' => 'required',
+            'occupation' => 'required|string',
+            'contact_number' => 'required',
+            'purok' => 'required|string',
+            'email' => 'required|string|email',
+            'username' => 'required|string',
+            // 'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        $user = User::find($id);
+        $user->last_name = $request->last_name;
+        $user->first_name = $request->first_name;
+        $user->middle_name = $request->middle_name;
+        $user->age = $request->age;
+        $user->occupation = $request->occupation;
+        $user->gender = $request->gender;
+        $user->birthdate = Carbon::parse($request->birthdate)->format('Y-m-d');
+        $user->birth_place = $request->birth_place;
+        $user->civil_status = $request->civil_status;
+        $user->contact_number = $request->contact_number;
+        $user->purok = $request->purok;
+        $user->email = $request->email;
+        $user->username = $request->username;
+        $user->save();
+
+        return response()->json($user, 200);
+
     }
 
     /**

@@ -48,7 +48,7 @@ class AuthController extends Controller
             'birthdate' => 'required',
             'birth_place' => 'required',
             'civil_status' => 'required',
-            'purok' => 'required|string',
+            'purok' => 'required',
             'occupation' => 'required|string',
             'contact_number' => 'required',
             'email' => 'required|string|email|unique:users,email',

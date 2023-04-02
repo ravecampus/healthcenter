@@ -3,31 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Medicine;
+use App\Models\Purok;
 
-class MedicineController extends Controller
+class PurokController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $columns = ['medicine_name','created_at'];
-        $length = $request->length;
-        $column = $request->column;
-        $dir = $request->dir;
-        $searchValue = $request->search;
-        $query = Medicine::orderBy('medicine_name', 'asc');
-    
-        if($searchValue){
-            $query->where(function($query) use ($searchValue){
-                $query->where('medicine_name', 'like', '%'.$searchValue.'%');
-            });
-        }
-        $projects = $query->paginate($length);
-        return ['data'=>$projects, 'draw'=> $request->draw];
+        $med = Purok::orderBy('purok_name', 'asc')->get();
+        return response()->json($med, 200);
     }
 
     /**
@@ -49,14 +37,13 @@ class MedicineController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'medicine_name' => 'required|string',
-            'medicine_type' => 'required',
+            'purok_name' => 'required|string'
         ]);
-        $med = Medicine::create([
-            'medicine_name' => $request->medicine_name,
-            'medicine_type' => $request->medicine_type
+        $purok = Purok::create([
+            'purok_name' => $request->purok_name
         ]);
-        return response()->json($med, 200);
+
+        return response()->json($purok, 200);
     }
 
     /**
@@ -91,15 +78,13 @@ class MedicineController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'medicine_name' => 'required|string',
-            'medicine_type' => 'required',
+            'purok_name' => 'required|string'
         ]);
-        $med = Medicine::find($id);
-        $med->medicine_name = $request->medicine_name;
-        $med->medicine_type = $request->medicine_type;
-        $med->save();
-
-        return response()->json($med, 200);
+        $purok = Purok::find($id);
+        $purok->purok_name = $request->purok_name;
+        $purok->save();
+    
+        return response()->json($purok, 200);
     }
 
     /**
@@ -111,9 +96,5 @@ class MedicineController extends Controller
     public function destroy($id)
     {
         //
-    }
-    public function listOfMedicine(){
-        $med = Medicine::orderBy('medicine_name', 'asc')->get();
-        return response()->json($med, 200);
     }
 }

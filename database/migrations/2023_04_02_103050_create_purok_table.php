@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateConsultationTable extends Migration
+class CreatePurokTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateConsultationTable extends Migration
      */
     public function up()
     {
-        Schema::create('consultation', function (Blueprint $table) {
+        Schema::create('purok', function (Blueprint $table) {
             $table->id();
-            $table->integer('service_request_id')->nullable();
-            $table->string('remarks')->nullable();
-            $table->integer('consultant')->nullable();
+            $table->string('purok_name')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateConsultationTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('consultation');
+        Schema::dropIfExists('purok');
     }
 }

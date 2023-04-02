@@ -15,7 +15,7 @@
         <div class="row">
 
             <div class="col-12">
-                <div class="card">
+                <div class="card shadow-sm">
                     <div class="card-body row">
                          <div class="col-6">
                             <div class="form-group">
@@ -112,14 +112,13 @@
                                     <tr class="spacer"></tr>
                                 </tbody>
                             </data-table>
-                            <div>
-                                <pagination :pagination="pagination"
-                                    @prev="listOfItem(pagination.prevPageUrl)"
-                                    @next="listOfItem(pagination.nextPageUrl)"
-                                    v-show="noData(request_sevices)">
-                                </pagination>
-                            </div>
-
+                        </div>
+                        <div>
+                            <pagination :pagination="pagination"
+                                @prev="listOfItem(pagination.prevPageUrl)"
+                                @next="listOfItem(pagination.nextPageUrl)"
+                                v-show="noData(request_sevices)">
+                            </pagination>
                         </div>
                     </div>
                 </div>

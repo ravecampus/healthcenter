@@ -37,6 +37,10 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function purok(){
+        return $this->hasOne(Purok::class, 'id', 'purok_id');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

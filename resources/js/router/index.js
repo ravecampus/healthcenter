@@ -12,6 +12,8 @@ import Schedule from '../admin/Schedule';
 import Profile from '../admin/Profile';
 import Medicine from '../admin/Medicine';
 import Patient from '../admin/Patient';
+import Consultation from '../admin/Consultation';
+import Purok from '../admin/Purok';
 
 import User from '../user/Mainpage';
 import UserProfile from '../user/Profile';
@@ -66,6 +68,11 @@ export const routes = [
                 component: MedicalService,
             },
             {
+                name: 'purok',
+                path: 'purok',
+                component: Purok,
+            },
+            {
                 name: 'servicerequest',
                 path: 'service-request',
                 component: ServiceRequest,
@@ -94,7 +101,12 @@ export const routes = [
                 name: 'patients',
                 path: 'patients',
                 component: Patient,
-            }
+            },
+            {
+                name: 'consultation',
+                path: 'consultation/:id',
+                component: Consultation,
+            },
 
         ]
     },
@@ -122,6 +134,8 @@ const openRoutes = [
     'userprofile',
     'userrequest',
     'patients',
+    'consultation',
+    'purok',
     
 ];
 

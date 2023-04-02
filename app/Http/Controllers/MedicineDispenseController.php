@@ -3,31 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Medicine;
+use App\Models\MedicineDispense;
+use Illuminate\Support\Facades\Auth;
 
-class MedicineController extends Controller
+class MedicineDispenseController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $columns = ['medicine_name','created_at'];
-        $length = $request->length;
-        $column = $request->column;
-        $dir = $request->dir;
-        $searchValue = $request->search;
-        $query = Medicine::orderBy('medicine_name', 'asc');
-    
-        if($searchValue){
-            $query->where(function($query) use ($searchValue){
-                $query->where('medicine_name', 'like', '%'.$searchValue.'%');
-            });
-        }
-        $projects = $query->paginate($length);
-        return ['data'=>$projects, 'draw'=> $request->draw];
+        $med = MedicineDispense::orderBy('created_at', 'desc')->get();
+        return response()->json($med, 200);
     }
 
     /**
@@ -49,13 +38,20 @@ class MedicineController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'medicine_name' => 'required|string',
-            'medicine_type' => 'required',
+            'medicine_id' => 'required',
+            'quantity' => 'required',
+            'every_take' => 'required',
+            'times' => 'required',
         ]);
-        $med = Medicine::create([
-            'medicine_name' => $request->medicine_name,
-            'medicine_type' => $request->medicine_type
+        $med = MedicineDispense::create([
+            'diagnos_id' => $request->diagnos_id,
+            'medicine_id' => $request->medicine_id,
+            'quantity' => $request->quantity,
+            'every_take' => $request->every_take,
+            'times' => $request->times,
+            'note' => $request->note,
         ]);
+
         return response()->json($med, 200);
     }
 
@@ -91,12 +87,17 @@ class MedicineController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'medicine_name' => 'required|string',
-            'medicine_type' => 'required',
+            'medicine_id' => 'required',
+            'quantity' => 'required',
+            'every_take' => 'required',
+            'times' => 'required',
         ]);
-        $med = Medicine::find($id);
-        $med->medicine_name = $request->medicine_name;
-        $med->medicine_type = $request->medicine_type;
+        $med = MedicineDispense::find($id);
+        $med->medicine_id = $request->medicine_id;
+        $med->quantity = $request->quantity;
+        $med->every_take = $request->every_take;
+        $med->times = $request->times;
+        $med->note = $request->note;
         $med->save();
 
         return response()->json($med, 200);
@@ -110,10 +111,8 @@ class MedicineController extends Controller
      */
     public function destroy($id)
     {
-        //
-    }
-    public function listOfMedicine(){
-        $med = Medicine::orderBy('medicine_name', 'asc')->get();
+        $med = MedicineDispense::find($id);
+        $med->delete();
         return response()->json($med, 200);
     }
 }

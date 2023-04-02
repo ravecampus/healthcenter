@@ -37,7 +37,7 @@
                                         <td>{{ extractGender(list.gender) }}</td>
                                         <td>{{ extractCS(list.civil_status) }}</td>
                                         <td>{{ list.occupation }}</td>
-                                        <td>{{ list.birthdate }}</td>
+                                        <td>{{ formatDate(list.birthdate) }}</td>
                                         <td>{{ list.birth_place }}</td>
                                         <td>{{ list.age }}</td>
                                         <td>{{ list.contact_number }}</td>
@@ -148,8 +148,28 @@
                                 </div>
                                 <div class="form-group mb-3 col-6">
                                     <label>Email</label>
-                                    <input type="text" v-model="post.eamil" class="form-control form-control-user" placeholder="Enter Contact Number">
+                                    <input type="text" v-model="post.email" class="form-control form-control-user" placeholder="Enter Contact Number">
                                     <span class="errors-material" v-if="errors.email">{{errors.email[0]}}</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="col-md-12 row" v-if="post.id == null">
+                                <div class="form-group mb-3 col-6">
+                                    <label>Username</label>
+                                    <input type="text" v-model="post.username" class="form-control form-control-user" placeholder="Enter Username">
+                                    <span class="errors-material" v-if="errors.username">{{errors.username[0]}}</span>
+                                </div>
+                                <div class="form-group mb-3 col-6">
+                                </div>
+                                <div class="form-group mb-3 col-6">
+                                    <label>Password</label>
+                                    <input type="password" v-model="post.password" class="form-control form-control-user" placeholder="Enter Password">
+                                    <span class="errors-material" v-if="errors.password">{{errors.password[0]}}</span>
+                                </div>
+                                <div class="form-group mb-3 col-6">
+                                    <label>Password Confirmation</label>
+                                    <input type="password" v-model="post.password_confirmation" class="form-control form-control-user" placeholder="Enter Password Confirmation">
+                                    <!-- <span class="errors-material" v-if="errors">{{errors.password_confirmation[0]}}</span> -->
                                 </div>
                             </div>
                         </div>
@@ -260,11 +280,11 @@ export default {
         if(this.post.id > 0){
             this.$axios.get('sanctum/csrf-cookie').then(response=>{
                this.btncap = "Saving...";
-               this.$axios.put('api/patients/'+this.post.id, this.post).then(res=>{
+               this.$axios.put('api/patient/'+this.post.id, this.post).then(res=>{
                    this.btncap = "Save";
-                   this.$emit('show',{'message':'Patients has been modified!'});
+                   this.$emit('show',{'message':'Patient has been modified!'});
                    this.post = {};
-                   this.listOfHWorker();
+                   this.listOfPatient();
                    $('.item').modal('hide');
                }).catch(err=>{
                    this.btncap = "Save";
@@ -274,11 +294,11 @@ export default {
         }else{
             this.$axios.get('sanctum/csrf-cookie').then(response=>{
                this.btncap = "Saving...";
-               this.$axios.post('api/Patients', this.post).then(res=>{
+               this.$axios.post('api/patient',this.post).then(res=>{
                    this.btncap = "Save";
                    this.post = {};
-                   this.$emit('show',{'message':'Patients has been saved!'});
-                   this.listOfHWorker();
+                   this.$emit('show',{'message':'Patient has been saved!'});
+                   this.listOfPatient();
                    $('.item').modal('hide');
                }).catch(err=>{
                    this.btncap = "Save";
@@ -349,6 +369,13 @@ export default {
             }else{
                 this.post.age = 0;
             }
+        },
+        formatDate(da){
+            let d = new Date(da);
+            const day =("0" + d.getDate()).slice(-2);
+            const month = ("0"+(d.getMonth()+1)).slice(-2);
+            const year =  d.getFullYear();
+            return  month+ "-" + day  + "-" + year;
         },
     },
     mounted() {

@@ -13,16 +13,27 @@ class ServiceRequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         
         $length = $request->length;
         $searchValue = $request->search;
-        $query = ServiceRequest::with('schedule', 'medical_service')->orderBy('created_at', 'desc');
+        $query = ServiceRequest::with('schedule', 'medical_service', 'patient')
+        ->select('service_request.*', 
+        'users.first_name', 
+        'users.last_name', 
+        'users.middle_name',
+        'users.position',
+        'users.gender',
+        'users.contact_number',
+        )->join('users', 'users.id', '=','service_request.user_id')
+        ->orderBy('created_at', 'desc');
     
         if($searchValue){
             $query->where(function($query) use ($searchValue){
-                // $query->where('medicine_name', 'like', '%'.$searchValue.'%');
+                $query->where('users.last_name', 'like', '%'.$searchValue.'%')
+                ->orWhere('users.first_name', 'like', '%'.$searchValue.'%')
+                ->orWhere('users.middle_name', 'like', '%'.$searchValue.'%');
             });
         }
         $projects = $query->paginate($length);

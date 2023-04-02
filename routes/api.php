@@ -10,6 +10,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\ConsultationController;
+use App\Http\Controllers\DiagnosisController;
+use App\Http\Controllers\PurokController;
+use App\Http\Controllers\MedicineDispenseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,8 +39,15 @@ Route::resource('health-worker', HealthWorkerController::class);
 Route::resource('medical-service', MedicalServiceController::class);
 Route::get('service-request-auth', [ServiceRequestController::class,'authRequest']);
 Route::resource('service-request', ServiceRequestController::class);
+Route::get('medicine-list', [MedicineController::class,'listOfMedicine']);
 Route::resource('medicine', MedicineController::class);
 Route::resource('patient', PatientController::class);
+Route::get('check-consult/{id}', [ConsultationController::class,'checkConsult']);
+Route::resource('consultation', ConsultationController::class);
+Route::resource('diagnosis', DiagnosisController::class);
+Route::resource('purok',PurokController::class);
+Route::resource('medicine-dispense',MedicineDispenseController::class);
+
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();

@@ -51,6 +51,9 @@
                         <li> <router-link class="waves-effect waves-dark" :to="{name:'profile'}" aria-expanded="false"><i
                                     class="fa fa-user-circle-o"></i><span class="hide-menu">Profile</span></router-link>
                         </li>
+                        <li> <router-link class="waves-effect waves-dark" :to="{name:'purok'}" aria-expanded="false"><i
+                                    class="fa fa-gear"></i><span class="hide-menu">Purok</span></router-link>
+                        </li>
                         <li> <router-link class="waves-effect waves-dark" :to="{name:'medicalservice'}" aria-expanded="false"><i
                                     class="fa fa-gear"></i><span class="hide-menu">Medical Service</span></router-link>
                         </li>
@@ -68,8 +71,8 @@
                                 <i class="fa fa-users"></i><span class="hide-menu">Patients</span>
                             </router-link>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-blank.html" aria-expanded="false"><i
-                                    class="fa fa-user-md"></i><span class="hide-menu">Blank</span></a>
+                        <li> <router-link class="waves-effect waves-dark" :to="{name:'servicerequest'}" aria-expanded="false"><i
+                                    class="fa fa-user-md"></i><span class="hide-menu">Service Request</span></router-link>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="#" @click="logout()" aria-expanded="false"><i
                                     class="fa fa-question-circle"></i><span class="hide-menu">Logout</span></a>

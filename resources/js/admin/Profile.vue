@@ -13,7 +13,7 @@
 
         <div class="row">
             <div class="col-lg-4 col-xlg-3 col-md-5">
-                <div class="card">
+                <div class="card shadow-sm">
                     <div class="card-body">
                         <center class="mt-4"> 
                             <img :src="'/profile.png'" class="img-circle" width="150" />
@@ -36,7 +36,7 @@
                 </div>
             </div>
             <div class="col-lg-8 col-xlg-9 col-md-7">
-                <div class="card">
+                <div class="card shadow-sm">
                     <div class="card-body">
                         <form class="form-horizontal form-material mx-2 row">
                             <div class="form-group col-6">

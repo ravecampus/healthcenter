@@ -20,9 +20,12 @@ class ServiceRequest extends Model
     ];
 
     public function schedule(){
-        return $this->hasOne(Schedule::class, 'id', 'schedule_id');
+        return $this->hasOne(Schedule::class, 'id', 'schedule_id')->with('healthworker');
     }
     public function medical_service(){
         return $this->hasOne(MedicalService::class, 'id', 'medical_service_id');
+    }
+    public function patient(){
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 }

@@ -109,8 +109,11 @@
                             </div>
                         </div>
                         <div class="form-outline mb-4 col-6">
-                            <input type="text" id="form3Example3" @keyup.enter="signup" v-model="post.purok" class="form-control"
-                            placeholder="Enter Purok" />
+                            <!-- <input type="text" id="form3Example3" @keyup.enter="signup" v-model="post.purok" class="form-control"
+                            placeholder="Enter Purok" /> -->
+                            <select class="form-control" v-model="post.purok">
+                                <option v-for="(ls, idx) in puroks" :key="idx" :value="ls.id">{{ ls.purok_name }}</option>
+                            </select>
                             <label class="form-label" for="form3Example3">Purok</label>
                             <div>
                                 <span class="errors-material" v-if="errors.purok">{{errors.purok[0]}}</span>
@@ -204,7 +207,8 @@ export default {
             btncap:'SUBMIT',
             btndis:false,
             title:'',
-            school:{}
+            school:{},
+            puroks:[]
         }
     },
     methods:{
@@ -235,9 +239,17 @@ export default {
                 this.post.age = 0;
             }
         },
+        listPurok(){
+           this.$axios.get('sanctum/csrf-cookie').then(response=>{
+               this.$axios.get('api/purok').then(res=>{
+                   this.puroks = res.data;
+               })
+           });
+       },
        
     },
     mounted() {
+        this.listPurok();
         this.title = window.Title.app_name;
          if(window.Laravel.isLoggedin){
             let user = window.Laravel.user;
