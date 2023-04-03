@@ -41,7 +41,7 @@
                                         <td>{{ list.birth_place }}</td>
                                         <td>{{ list.age }}</td>
                                         <td>{{ list.contact_number }}</td>
-                                        <td>{{ list.purok }}</td>
+                                        <td>{{ xtractPurok(list.purok) }}</td>
                                         <td>{{ list.email }}</td>
                                         <td>
                                             <div class="table-data-feature">
@@ -143,7 +143,9 @@
                                 </div>
                                 <div class="form-group mb-3 col-6">
                                     <label>Purok</label>
-                                    <input type="text" v-model="post.purok" class="form-control form-control-user" placeholder="Enter Contact Number">
+                                    <select class="form-control" v-model="post.purok">
+                                        <option v-for="(ls, idx) in puroks" :key="idx" :value="ls.id">{{ ls.purok_name }}</option>
+                                    </select>
                                     <span class="errors-material" v-if="errors.purok">{{errors.purok[0]}}</span>
                                 </div>
                                 <div class="form-group mb-3 col-6">
@@ -240,6 +242,7 @@ export default {
             btncap:"Save",
             post:{},
             errors:[],
+            puroks:[],
             patients:[],
             columns:columns,
             sortOrders:sortOrders,
@@ -377,9 +380,26 @@ export default {
             const year =  d.getFullYear();
             return  month+ "-" + day  + "-" + year;
         },
+        listPurok(){
+           this.$axios.get('sanctum/csrf-cookie').then(response=>{
+               this.$axios.get('api/purok').then(res=>{
+                   this.puroks = res.data;
+               })
+           });
+       },
+       xtractPurok(num){
+           let ret ="";
+           this.puroks.forEach(val => {
+               if(val.id == num){
+                   ret = val.purok_name;
+               }
+           });
+           return ret;
+       }
     },
     mounted() {
         this.listOfPatient();
+        this.listPurok();
     },
 }
 </script>

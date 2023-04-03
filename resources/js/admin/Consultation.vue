@@ -235,6 +235,7 @@ export default {
             $('.item').modal('show');
         },
         showModalMed(data){
+            this.post_ = {};
             this.post_.diagnos_id = data.id;
             $('.item-2').modal('show');
         },
