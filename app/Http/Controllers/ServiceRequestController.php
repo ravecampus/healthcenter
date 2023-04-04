@@ -19,6 +19,7 @@ class ServiceRequestController extends Controller
         $length = $request->length;
         $searchValue = $request->search;
         $query = ServiceRequest::with('schedule', 'medical_service', 'patient')
+        ->where('service_request.status', 0)
         ->select('service_request.*', 
         'users.first_name', 
         'users.last_name', 
@@ -158,5 +159,12 @@ class ServiceRequestController extends Controller
              ]);
          
          return response()->json($service, 200);
+    }
+
+    public function completeService($id){
+        $sereq = ServiceRequest::find($id);
+        $sereq->status = 1;
+        $sereq->save();
+        return response()->json($sereq, 200);
     }
 }

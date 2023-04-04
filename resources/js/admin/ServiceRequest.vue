@@ -250,38 +250,38 @@ export default {
            this.post = data;
            $('.item').modal('show');           
        },
-    //    saveItem(){
-    //     if(this.post.id > 0){
-    //         this.$axios.get('sanctum/csrf-cookie').then(response=>{
-    //            this.btncap = "Saving...";
-    //            this.$axios.put('api/patient/'+this.post.id, this.post).then(res=>{
-    //                this.btncap = "Save";
-    //                this.$emit('show',{'message':'Patient has been modified!'});
-    //                this.post = {};
-    //                this.listOfPatient();
-    //                $('.item').modal('hide');
-    //            }).catch(err=>{
-    //                this.btncap = "Save";
-    //                this.errors = err.response.data.errors;
-    //            });
-    //        });
-    //     }else{
-    //         this.$axios.get('sanctum/csrf-cookie').then(response=>{
-    //            this.btncap = "Saving...";
-    //            this.$axios.post('api/patient',this.post).then(res=>{
-    //                this.btncap = "Save";
-    //                this.post = {};
-    //                this.$emit('show',{'message':'Patient has been saved!'});
-    //                this.listOfPatient();
-    //                $('.item').modal('hide');
-    //            }).catch(err=>{
-    //                this.btncap = "Save";
-    //                this.errors = err.response.data.errors;
-    //            });
-    //        });
-    //     }
+       saveItem(){
+        // if(this.post.id > 0){
+        //     this.$axios.get('sanctum/csrf-cookie').then(response=>{
+        //        this.btncap = "Saving...";
+        //        this.$axios.put('api/patient/'+this.post.id, this.post).then(res=>{
+        //            this.btncap = "Save";
+        //            this.$emit('show',{'message':'Patient has been modified!'});
+        //            this.post = {};
+        //            this.listOfPatient();
+        //            $('.item').modal('hide');
+        //        }).catch(err=>{
+        //            this.btncap = "Save";
+        //            this.errors = err.response.data.errors;
+        //        });
+        //    });
+        // }else{
+            this.$axios.get('sanctum/csrf-cookie').then(response=>{
+               this.btncap = "Saving...";
+               this.$axios.post('api/add-service-request',this.post).then(res=>{
+                   this.btncap = "Save";
+                   this.post = {};
+                   this.$emit('show',{'message':'Service Request has been saved!'});
+                   this.listOfServices();
+                   $('.item').modal('hide');
+               }).catch(err=>{
+                   this.btncap = "Save";
+                   this.errors = err.response.data.errors;
+               });
+           });
+        // }
           
-    //    },
+       },
         listOfServices(urls='api/service-request'){
             this.$axios.get('sanctum/csrf-cookie').then(response => {
                 this.tableData.draw ++;

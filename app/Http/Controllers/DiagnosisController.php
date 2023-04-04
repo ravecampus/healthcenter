@@ -63,7 +63,8 @@ class DiagnosisController extends Controller
      */
     public function show($id)
     {
-        //
+        $diag = Diagnos::with('medicine_dispense')->where('service_request_id', $id)->orderBy('created_at', 'desc')->get();
+        return response()->json($diag, 200);
     }
 
     /**

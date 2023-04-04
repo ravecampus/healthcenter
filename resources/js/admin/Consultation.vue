@@ -56,7 +56,9 @@
                                                     <tr v-for="(ls, idxx) in list.medicine_dispense" :key="idxx">
                                                         <td>{{ ls.medicine.medicine_name }} - {{ extractMedicineType(ls.medicine.medicine_type ) }}</td>
                                                         <td>{{ ls.quantity}}</td>
-                                                        <td>Take {{ ls.times }} times a {{ ls.every_take }}</td>
+                                                        <td>Take {{ ls.times }} times a {{ ls.every_take }}
+                                                            <p>Note: {{ls.note}}</p>
+                                                        </td>
                                                         <td>
                                                             <div class="btn-group">
                                                                 <button type="button" @click="editDM(ls)" class="btn btn-info text-white btn-sm">
@@ -86,6 +88,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        <button type="button" v-if="diagnosis.length > 0" @click="completeDiagnosis()" class="btn btn-info text-white">Complete</button>
                     </div>
                 </div>
             </div>
@@ -190,11 +193,11 @@
                     </div>
                     <div class="modal-footer text-center">
                         <button type="button" @click="delConfirm()" class="btn btn-danger btn-sm text-white">
-                            <i class="fa fa-save"></i>
+                            <i class="fa fa-check"></i>
                            Yes
                         </button>
                         <button type="button" @click="cancel()" class="btn btn-info btn-sm text-white">
-                            <i class="fa fa-save"></i>
+                            <i class="fa fa-times"></i>
                            No
                         </button>
         
@@ -221,6 +224,7 @@ export default {
             btncap:"Consult?",
             btncap1:"Save",
             btncap2:"Save",
+            btncom:"Complete",
             diagnosis:[],
             medicines:[],
         }
@@ -275,6 +279,7 @@ export default {
            });
         },
         saveDiagnosis(){
+            let id = this.$route.params.id;
             if(this.post.id > 0){
                 this.$axios.get('sanctum/csrf-cookie').then(response=>{
                     this.btncap1 = "Saving...";
@@ -283,7 +288,7 @@ export default {
                         this.$emit('show',{'message':'Diagnosis has been Modefied!'});
                         this.post = {};
                         this.errors = [];
-                        this.listDiagnos();
+                        this.listDiagnos(id);
                         $('.item').modal('hide');
                     }).catch(err=>{
                         this.btncap1 = "Save";
@@ -299,7 +304,7 @@ export default {
                         this.$emit('show',{'message':'Diagnosis has been Added!'});
                         this.post = {};
                         this.errors = [];
-                        this.listDiagnos();
+                        this.listDiagnos(id);
                         $('.item').modal('hide');
                     }).catch(err=>{
                         this.btncap1 = "Save";
@@ -309,9 +314,9 @@ export default {
             }
             
         },
-        listDiagnos(){
+        listDiagnos(id){
              this.$axios.get('sanctum/csrf-cookie').then(response => {
-                this.$axios.get('api/diagnosis').then(res=>{
+                this.$axios.get('api/diagnosis/'+id).then(res=>{
                     this.diagnosis = res.data;
                 });
             });
@@ -338,6 +343,7 @@ export default {
         },
 
         saveMedineDis(){
+            let id = this.$route.params.id;
             if(this.post_.id > 0){
                 this.$axios.get('sanctum/csrf-cookie').then(response=>{
                     this.btncap2 = "Saving...";
@@ -346,7 +352,7 @@ export default {
                         this.$emit('show',{'message':'Medicine has been Modefied!'});
                         this.post_ = {};
                         this.errors = [];
-                        this.listDiagnos();
+                        this.listDiagnos(id);
                         $('.item-2').modal('hide');
                     }).catch(err=>{
                         this.btncap2 = "Save";
@@ -361,7 +367,7 @@ export default {
                         this.$emit('show',{'message':'Medicine has been Added!'});
                         this.post_ = {};
                         this.errors = [];
-                        this.listDiagnos();
+                        this.listDiagnos(id);
                         $('.item-2').modal('hide');
                     }).catch(err=>{
                         this.btncap2 = "Save";
@@ -382,6 +388,18 @@ export default {
                     $('.delete').modal('hide');
                 });
             });
+        },
+        completeDiagnosis(){
+            let id = this.$route.params.id;
+            this.$axios.get('sanctum/csrf-cookie').then(response=>{
+                this.btncom = "Completing...";
+                this.$axios.delete('api/service-request-complete/'+id).then(res=>{
+                    this.$emit('show',{'message':'Medicine has been Deleted!'});
+                    this.btncom = "Complete";
+                    // this.listDiagnos();
+                    // $('.delete').modal('hide');
+                });
+            });
         }
         
 
@@ -389,7 +407,7 @@ export default {
     mounted() {
         let id = this.$route.params.id;
         this.checkConsult(id);
-        this.listDiagnos();
+        this.listDiagnos(id);
         this.listMedicine();
     },
 
