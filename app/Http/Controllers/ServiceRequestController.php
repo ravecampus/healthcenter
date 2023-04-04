@@ -136,4 +136,27 @@ class ServiceRequestController extends Controller
         $projects = $query->paginate($length);
         return ['data'=>$projects, 'draw'=> $request->draw];
     }
+
+    public function markAbsent(Request $request){
+        $sereq = ServiceRequest::find($request->id);
+        $sereq->status = 3;
+        $sereq->save();
+        return response()->json($sereq, 200);
+    }
+
+    public function addServiceRequest(Request $request){
+        $request->validate([
+            'schedule' => 'required',
+            'medical_service' => 'required',
+            'patient' => 'required',
+            ]);
+ 
+         $service = ServiceRequest::create([
+             'schedule_id' => $request->schedule,
+             'medical_service_id' => $request->medical_service,
+             'user_id' => $request->patient,
+             ]);
+         
+         return response()->json($service, 200);
+    }
 }

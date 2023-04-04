@@ -41,7 +41,7 @@
                                                 <button class="btn btn-info text-white btn-sm" @click="consultation(list)" data-toggle="tooltip" title="Consult">
                                                     <i class="fa fa-user-md"></i> Consultation
                                                 </button>
-                                                 <button class="btn btn-warning text-white btn-sm" data-toggle="tooltip" @click="editModal(list)" title="Consult">
+                                                 <button class="btn btn-warning text-white btn-sm" @click="showModalAbsent(list)" data-toggle="tooltip" title="Consult">
                                                     <i class="fa fa-times"></i> Absent
                                                 </button>
                                                 
@@ -49,7 +49,7 @@
                                         </td>
                                     </tr>
                                     <tr> 
-                                        <td colspan="11" v-show="!noData(patients)">
+                                        <td colspan="11" v-show="!noData(service_request)">
                                             No Result Found!
                                         </td>
                                     </tr>
@@ -70,103 +70,57 @@
         </div>
 
         <div class="modal fade item" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h4>Patients</h4>
+                    <h4>Service Request</h4>
                 </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-md-12 row">
-                                <div class="form-group mb-3 col-6">
-                                    <label>Firstname</label>
-                                    <input type="text" v-model="post.first_name" class="form-control form-control-user" placeholder="Enter Firstname">
-                                    <span class="errors-material" v-if="errors.first_name">{{errors.first_name[0]}}</span>
-                                </div>
-                                <div class="form-group mb-3 col-6">
-                                    <label>Middlename</label>
-                                    <input type="text" v-model="post.middle_name" class="form-control form-control-user" placeholder="Enter Middlename">
-                                    <span class="errors-material" v-if="errors.description">{{errors.description[0]}}</span>
-                                </div>
-                                <div class="form-group mb-3 col-6">
-                                    <label>Lastname</label>
-                                    <input type="text" v-model="post.last_name" class="form-control form-control-user" placeholder="Enter Lastname">
-                                    <span class="errors-material" v-if="errors.last_name">{{errors.last_name[0]}}</span>
-                                </div>
-                                <div class="form-group mb-3 col-6">
-                                    <label>Gender</label>
-                                    <select class="form-control" v-model="post.gender">
-                                        <option value="1">Male</option>
-                                        <option value="2">Femle</option>
-                                    </select>
-                                    <span class="errors-material" v-if="errors.gender">{{errors.gender[0]}}</span>
-                                </div>
-                                <div class="form-group mb-3 col-6">
-                                    <label>Civil Status</label>
-                                    <select class="form-control" v-model="post.civil_status">
-                                        <option :value="1">Single</option>
-                                        <option :value="2">Married</option>
-                                        <option :value="3">Legally Separated</option>
-                                        <option :value="4">Annulled</option>
-                                        <option :value="5">Widow/er</option>
-                                    </select>
-                                    <span class="errors-material" v-if="errors.civil_status">{{errors.civil_status[0]}}</span>
-                                </div>
-                                <div class="form-group mb-3 col-6">
-                                    <label>Occupation</label>
-                                    <input type="text" v-model="post.occupation" class="form-control form-control-user" placeholder="Enter Lastname">
-                                    <span class="errors-material" v-if="errors.occupation">{{errors.occupation[0]}}</span>
-                                </div>
-                                 <div class="form-group mb-3 col-6">
-                                    <label>Birthdate</label>
-                                    <Datepicker v-model="post.birthdate" :format="format"  placeholder="Birthdate" :change="setAge()"/>
-                                    <span class="errors-material" v-if="errors.birthdate">{{errors.birthdate[0]}}</span>
-                                </div>
-                                 <div class="form-group mb-3 col-6">
-                                    <label>Birth Place</label>
-                                    <input type="text" v-model="post.birth_place" class="form-control form-control-user" placeholder="Enter Lastname">
-                                    <span class="errors-material" v-if="errors.birth_place">{{errors.birth_place[0]}}</span>
-                                </div>
-                                 <div class="form-group mb-3 col-6">
-                                    <label>Age</label>
-                                    <input type="text" v-model="post.age"  readonly class="form-control form-control-user" placeholder="Enter Contact Number">
-                                    <span class="errors-material" v-if="errors.age">{{errors.age[0]}}</span>
-                                </div>
-                                <div class="form-group mb-3 col-6">
-                                    <label>Contact Number</label>
-                                    <input type="text" v-model="post.contact_number" class="form-control form-control-user" placeholder="Enter Contact Number">
-                                    <span class="errors-material" v-if="errors.contact_number">{{errors.contact_number[0]}}</span>
-                                </div>
-                                <div class="form-group mb-3 col-6">
-                                    <label>Purok</label>
-                                    <input type="text" v-model="post.purok" class="form-control form-control-user" placeholder="Enter Contact Number">
-                                    <span class="errors-material" v-if="errors.purok">{{errors.purok[0]}}</span>
-                                </div>
-                                <div class="form-group mb-3 col-6">
-                                    <label>Email</label>
-                                    <input type="text" v-model="post.email" class="form-control form-control-user" placeholder="Enter Contact Number">
-                                    <span class="errors-material" v-if="errors.email">{{errors.email[0]}}</span>
-                                </div>
+                            <div class="form-group mb-3">
+                                <label>Patient</label>
+                                <select class="form-control" v-model="post.patient">
+                                    <option v-for="(ls, idx) in patients" :key="idx" :value="ls.id">{{ ls.first_name }} {{ ls.last_name }}</option>
+                                </select>
+                                <span class="errors-material" v-if="errors.patient">{{errors.patient[0]}}</span>
                             </div>
-                            <hr>
-                            <div class="col-md-12 row" v-if="post.id == null">
-                                <div class="form-group mb-3 col-6">
-                                    <label>Username</label>
-                                    <input type="text" v-model="post.username" class="form-control form-control-user" placeholder="Enter Username">
-                                    <span class="errors-material" v-if="errors.username">{{errors.username[0]}}</span>
+                            <div class="form-group">
+                                <label class="col-md-12">Medical Service</label>
+                                <div class="col-md-12">
+                                    <select class="form-control" v-model="post.medical_service">
+                                        <option v-for="(ls, idx) in medical_services" :key="idx" :value="ls.id">{{ ls.description }}</option>
+                                    </select>
                                 </div>
-                                <div class="form-group mb-3 col-6">
-                                </div>
-                                <div class="form-group mb-3 col-6">
-                                    <label>Password</label>
-                                    <input type="password" v-model="post.password" class="form-control form-control-user" placeholder="Enter Password">
-                                    <span class="errors-material" v-if="errors.password">{{errors.password[0]}}</span>
-                                </div>
-                                <div class="form-group mb-3 col-6">
-                                    <label>Password Confirmation</label>
-                                    <input type="password" v-model="post.password_confirmation" class="form-control form-control-user" placeholder="Enter Password Confirmation">
-                                    <!-- <span class="errors-material" v-if="errors">{{errors.password_confirmation[0]}}</span> -->
-                                </div>
+
+                                <span class="errors-material" v-if="errors.medical_service">{{errors.medical_service[0]}}</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="example-email" class="col-md-12">Schedule</label>
+                                <table class="table table-sm table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>TIME|DAYS</th>
+                                            <th>HEALTH WORKER</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(ls, idx) in schedules" :key="idx">
+                                            <td>
+                                                <!-- <div class="form-group"> -->
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" v-model="post.schedule" :value="ls.id" :id="'schd'+ls.id">
+                                                        <label class="form-check-label" :for="'schd'+ls.id">
+                                                        </label>
+                                                    </div>
+                                                <!-- </div> -->
+                                            </td>
+                                            <td>{{ extractTime(ls.start_time) }} - {{  extractTime(ls.end_time)}} | {{ xtractDay(ls.day) }}</td>
+                                            <td> {{ ls.healthworker.first_name}} {{ ls.healthworker.last_name }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <span class="errors-material" v-if="errors.schedule">{{errors.schedule[0]}}</span>
                             </div>
                         </div>
                     </div>
@@ -181,6 +135,22 @@
             </div>
         </div>
 
+        <div class="modal fade absent">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6>Service Request</h6>
+                    </div>
+                    <div class="modal-body">
+                       <h4>Do you want to Mark Absent?</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" @click="confirmMark()" class="btn btn-warning text-white btn-block" >Yes</button>  
+                        <button type="button" @click="cancel()" class="btn btn-info text-white btn-block" >No</button>  
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </template>
@@ -235,6 +205,9 @@ export default {
             errors:[],
             diagnosis:[],
             service_request:[],
+            medical_services:[],
+            schedules:[],
+            patients:[],
             columns:columns,
             sortOrders:sortOrders,
             sortKey:'created_at',
@@ -261,6 +234,13 @@ export default {
         }
     },
     methods: {
+        cancel(){
+            $('.absent').modal('hide');
+        },
+        showModalAbsent(data){
+            $('.absent').modal('show');
+            this.post = data;
+        },
        showModal(){
            this.post = {};
            this.errors = [];
@@ -270,38 +250,38 @@ export default {
            this.post = data;
            $('.item').modal('show');           
        },
-       saveItem(){
-        if(this.post.id > 0){
-            this.$axios.get('sanctum/csrf-cookie').then(response=>{
-               this.btncap = "Saving...";
-               this.$axios.put('api/patient/'+this.post.id, this.post).then(res=>{
-                   this.btncap = "Save";
-                   this.$emit('show',{'message':'Patient has been modified!'});
-                   this.post = {};
-                   this.listOfPatient();
-                   $('.item').modal('hide');
-               }).catch(err=>{
-                   this.btncap = "Save";
-                   this.errors = err.response.data.errors;
-               });
-           });
-        }else{
-            this.$axios.get('sanctum/csrf-cookie').then(response=>{
-               this.btncap = "Saving...";
-               this.$axios.post('api/patient',this.post).then(res=>{
-                   this.btncap = "Save";
-                   this.post = {};
-                   this.$emit('show',{'message':'Patient has been saved!'});
-                   this.listOfPatient();
-                   $('.item').modal('hide');
-               }).catch(err=>{
-                   this.btncap = "Save";
-                   this.errors = err.response.data.errors;
-               });
-           });
-        }
+    //    saveItem(){
+    //     if(this.post.id > 0){
+    //         this.$axios.get('sanctum/csrf-cookie').then(response=>{
+    //            this.btncap = "Saving...";
+    //            this.$axios.put('api/patient/'+this.post.id, this.post).then(res=>{
+    //                this.btncap = "Save";
+    //                this.$emit('show',{'message':'Patient has been modified!'});
+    //                this.post = {};
+    //                this.listOfPatient();
+    //                $('.item').modal('hide');
+    //            }).catch(err=>{
+    //                this.btncap = "Save";
+    //                this.errors = err.response.data.errors;
+    //            });
+    //        });
+    //     }else{
+    //         this.$axios.get('sanctum/csrf-cookie').then(response=>{
+    //            this.btncap = "Saving...";
+    //            this.$axios.post('api/patient',this.post).then(res=>{
+    //                this.btncap = "Save";
+    //                this.post = {};
+    //                this.$emit('show',{'message':'Patient has been saved!'});
+    //                this.listOfPatient();
+    //                $('.item').modal('hide');
+    //            }).catch(err=>{
+    //                this.btncap = "Save";
+    //                this.errors = err.response.data.errors;
+    //            });
+    //        });
+    //     }
           
-       },
+    //    },
         listOfServices(urls='api/service-request'){
             this.$axios.get('sanctum/csrf-cookie').then(response => {
                 this.tableData.draw ++;
@@ -412,11 +392,82 @@ export default {
         consultation(data){
             this.$router.push({name:'consultation', params:{'id':data.id}});
         },
+        confirmMark(){
+            this.$axios.get('sanctum/csrf-cookie').then(response=>{
+               this.$axios.post('api/mark-absent',this.post).then(res=>{
+                   this.post = {};
+                   this.$emit('show',{'message':'Service Request has been mark as absent!'});
+                   this.listOfServices();
+                   $('.absent').modal('hide');
+               });
+           });
+        },
+        listMedicalService(){
+           this.$axios.get('sanctum/csrf-cookie').then(response=>{
+               this.$axios.get('api/medical-service').then(res=>{
+                   this.medical_services = res.data;
+               })
+           });
+       },
+        lisOfSchedule(){
+           this.$axios.get('sanctum/csrf-cookie').then(response=>{
+               this.$axios.get('api/list-schedule').then(res=>{
+                   this.schedules = res.data;
+               })
+           });
+       },
+       lisOfPatient(){
+           this.$axios.get('sanctum/csrf-cookie').then(response=>{
+               this.$axios.get('api/patient-list').then(res=>{
+                   this.patients = res.data;
+               })
+           });
+       },
+       extractTime(time){
+          // Check correct time format and split into components
+            time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+
+            if (time.length > 1) { // If time format correct
+                time = time.slice (1);  // Remove full string match value
+                time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
+                time[0] = +time[0] % 12 || 12; // Adjust hours
+            }
+            return time.join (''); // return adjusted time or original string
+        },
+        xtractDay(data){
+            let data_ = JSON.parse(data);
+            let txt = "";
+            data_.sort((a, b) => a - b);
+            data_.forEach(val=>{
+                if(val == 1){
+                    txt += "M";
+                }
+                if(val==2){
+                    txt += "T";
+                }
+                if(val==3){
+                    txt += "W";
+                }
+                if(val==4){
+                    txt += "TH";
+                }
+                if(val==5){
+                    txt += "F";
+                }
+                if(val==6){
+                    txt += "S";
+                }
+            });
+
+            return txt;
+        },
 
     },
     mounted() {
         this.listOfServices();
-       
+        this.listMedicalService();
+        this.lisOfSchedule();
+        this.lisOfPatient();
     },
 }
 </script>

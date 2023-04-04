@@ -167,4 +167,9 @@ class PatientController extends Controller
     {
         //
     }
+
+    public function listPatient(){
+        $user = User::orderBy('first_name', 'asc')->where('role', 0)->get();
+        return response()->json($user, 200);
+    }
 }

@@ -32,6 +32,13 @@
                             <div class="form-group">
                                 <label for="example-email" class="col-md-12">Schedule</label>
                                 <table class="table table-sm table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>TIME|DAYS</th>
+                                            <th>HEALTH WORKER</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                         <tr v-for="(ls, idx) in schedules" :key="idx">
                                             <td>
