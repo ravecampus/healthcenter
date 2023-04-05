@@ -74,6 +74,9 @@
                         <li> <router-link class="waves-effect waves-dark" :to="{name:'servicerequest'}" aria-expanded="false"><i
                                     class="fa fa-user-md"></i><span class="hide-menu">Service Request</span></router-link>
                         </li>
+                        <li> <router-link class="waves-effect waves-dark" :to="{name:'completed'}" aria-expanded="false"><i
+                            class="fa fa-check"></i><span class="hide-menu">Completed SR</span></router-link>
+                        </li>
                         <li> <a class="waves-effect waves-dark" href="#" @click="logout()" aria-expanded="false"><i
                                     class="fa fa-question-circle"></i><span class="hide-menu">Logout</span></a>
                         </li>

@@ -393,8 +393,8 @@ export default {
             let id = this.$route.params.id;
             this.$axios.get('sanctum/csrf-cookie').then(response=>{
                 this.btncom = "Completing...";
-                this.$axios.delete('api/service-request-complete/'+id).then(res=>{
-                    this.$emit('show',{'message':'Medicine has been Deleted!'});
+                this.$axios.get('api/service-request-complete/'+id).then(res=>{
+                    this.$emit('show',{'message':'Service Request has been Completed!'});
                     this.btncom = "Complete";
                     // this.listDiagnos();
                     // $('.delete').modal('hide');

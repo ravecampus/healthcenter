@@ -167,4 +167,31 @@ class ServiceRequestController extends Controller
         $sereq->save();
         return response()->json($sereq, 200);
     }
+
+    public function completedSR(Request $request){
+
+        $length = $request->length;
+        $searchValue = $request->search;
+        $query = ServiceRequest::with('schedule', 'medical_service', 'patient')
+        ->where('service_request.status', 1)
+        ->select('service_request.*', 
+        'users.first_name', 
+        'users.last_name', 
+        'users.middle_name',
+        'users.position',
+        'users.gender',
+        'users.contact_number',
+        )->join('users', 'users.id', '=','service_request.user_id')
+        ->orderBy('created_at', 'desc');
+    
+        if($searchValue){
+            $query->where(function($query) use ($searchValue){
+                $query->where('users.last_name', 'like', '%'.$searchValue.'%')
+                ->orWhere('users.first_name', 'like', '%'.$searchValue.'%')
+                ->orWhere('users.middle_name', 'like', '%'.$searchValue.'%');
+            });
+        }
+        $projects = $query->paginate($length);
+        return ['data'=>$projects, 'draw'=> $request->draw];
+    }
 }

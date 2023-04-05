@@ -37,6 +37,7 @@ Route::resource('schedule', ScheduleController::class);
 Route::get('list-health-worker', [HealthWorkerController::class, 'listHealthWorker']);
 Route::resource('health-worker', HealthWorkerController::class);
 Route::resource('medical-service', MedicalServiceController::class);
+Route::get('completed-sr', [ServiceRequestController::class,'completedSR']);
 Route::post('mark-absent', [ServiceRequestController::class,'markAbsent']);
 Route::get('service-request-auth', [ServiceRequestController::class,'authRequest']);
 Route::get('service-request-complete/{id}', [ServiceRequestController::class,'completeService']);

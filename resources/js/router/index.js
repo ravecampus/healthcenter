@@ -14,6 +14,7 @@ import Medicine from '../admin/Medicine';
 import Patient from '../admin/Patient';
 import Consultation from '../admin/Consultation';
 import Purok from '../admin/Purok';
+import Completed from '../admin/CompletedSR';
 
 import User from '../user/Mainpage';
 import UserProfile from '../user/Profile';
@@ -107,6 +108,11 @@ export const routes = [
                 path: 'consultation/:id',
                 component: Consultation,
             },
+            {
+                name: 'completed',
+                path: 'completed-sr',
+                component: Completed,
+            },
 
         ]
     },
@@ -136,6 +142,7 @@ const openRoutes = [
     'patients',
     'consultation',
     'purok',
+    'completed',
     
 ];
 
