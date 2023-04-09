@@ -98,21 +98,18 @@
                                             </strong>
                                         </td>
                                         <td>{{extractTime(list.schedule.start_time) }} - {{ extractTime(list.schedule.end_time) }} |  {{xtractDay(list.schedule.day)}}</td>
-                                        <td>{{ list.status }}</td>
+                                        <td>{{ xtractStatus(list.status) }}</td>
+                                        <td>{{ formatDate(list.created_at) }}</td>
                                         <td>
-                                            <div class="btn-group">
-                                                <button class="btn btn-info text-white btn-sm" data-toggle="tooltip" @click="editModal(list)" title="Edit">
+                                            <div class="btn-group" v-if="list.consulted == null">
+                                                <button class="btn btn-info text-white btn-sm" @data-toggle="tooltip" @click="cancelRequest(list)" title="Edit">
                                                     <i class="fa fa-times"></i> Cancel
                                                 </button>
-                                                 <button class="btn btn-info text-white btn-sm" data-toggle="tooltip" @click="editModal(list)" title="Edit">
-                                                    <i class="fa fa-eye"></i> View
-                                                </button>
-                                                
                                             </div>
                                         </td>
                                     </tr>
                                     <tr> 
-                                        <td colspan="4" v-show="!noData(request_sevices)">
+                                        <td colspan="5" v-show="!noData(request_sevices)">
                                             No Result Found!
                                         </td>
                                     </tr>
@@ -132,42 +129,29 @@
             </div>
         </div>
 
-        <div class="modal fade item" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+        <div class="modal fade cancel-req" role="dialog" aria-labelledby="mediumModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h4>Doctors</h4>
+                    <h4>Request Service</h4>
                 </div>
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="form-group mb-3">
-                                    <label>Medicine name</label>
-                                    <input type="text" v-model="post.medicine_name" class="form-control form-control-user" placeholder="Medicine Name">
-                                    <span class="errors-material" v-if="errors.medicine_name">{{errors.medicine_name[0]}}</span>
-                                </div>
-                                
-                                <div class="form-group mb-3">
-                                    <label>Medicine Type</label>
-                                    <select class="form-control" v-model="post.medicine_type">
-                                        <option value="1">Tablet</option>
-                                        <option value="2">Capsule</option>
-                                        <option value="3">Syrup</option>
-                                        <option value="4">Suspension</option>
-                                        <option value="5">Drops</option>
-                                        <option value="6">Powder</option>
-                                    </select>
-                                    <span class="errors-material" v-if="errors.medicine_type">{{errors.medicine_type[0]}}</span>
-                                </div>
+                                <h4>Do you want to cancel the Request?</h4>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer text-center">
-                        <button type="button" @click="saveItem()" class="btn btn-info text-white">
-                            <i class="fa fa-save"></i>
-                            {{ btncap }}
+                        <button type="button" @click="confirmCancel()" class="btn btn-danger text-white btn-sm">
+                            <i class="fa fa-check"></i>
+                            Yes
                         </button>
-                        <!-- <button type="button" @click="cancelButton()" class="btn btn-secondary btn-sm">No</button> -->
+                          <button type="button" @click="cancel()" class="btn btn-info text-white btn-sm">
+                            <i class="fa fa-times"></i>
+                            No
+                        </button>
+        
                     </div>
                 </div>
             </div>
@@ -193,6 +177,7 @@ export default {
         {label:'MEDICAL SERVICE', name:null},
         {label:'SCHEDULE', name:null},
         {label:'STATUS', name:null},
+        {label:'DATE', name:null},
         {label:'ACTION', name:null},
         ];
         
@@ -300,6 +285,7 @@ export default {
                this.btncap = "Sending...";
                this.$axios.post('api/service-request', this.post).then(res=>{
                    this.btncap = "Send";
+                   this.errors = [];
                    this.post = {};
                    this.$emit('show',{'message':'Service Request sent!'});
                    this.listOfItem();
@@ -358,6 +344,33 @@ export default {
         },
         extractMedicineType(num){
             return num == 1 ? "Tablet" : num == 2 ? "Capsule" : num == 3 ? "Syrup" : num == 4 ? "Suspension" : num == 5 ? "Drops" : num == 6 ? "Powder": ""; 
+        },
+        xtractStatus(num){
+            return num == 0 ? "Pending" : num == 1 ? "Completed" : num == 3 ? "Absent" : "";
+        },
+        formatDate(da){
+            let d = new Date(da);
+            const day =("0" + d.getDate()).slice(-2);
+            const month = ("0"+(d.getMonth()+1)).slice(-2);
+            const year =  d.getFullYear();
+            return  month+ "-" + day  + "-" + year;
+        },
+        cancelRequest(data){
+            this.post = data;
+            $('.cancel-req').modal('show');
+        },
+        cancel(){
+            $('.cancel-req').modal('hide');
+        },
+        confirmCancel(){
+            this.$axios.get('sanctum/csrf-cookie').then(response=>{
+               this.$axios.get('api/confirm-cancel/'+this.post.id).then(res=>{
+                   this.post = {};
+                   this.$emit('show',{'message':'Service Request has been cancelled!'});
+                   this.listOfItem();
+                   $('.cancel-req').modal('hide');
+               });
+           }); 
         }
     },
     mounted() {

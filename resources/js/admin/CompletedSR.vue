@@ -3,7 +3,7 @@
             
         <div class="row page-titles">
             <div class="col-md-5 align-self-center">
-                <h3 class="text-themecolor">Service Request</h3>
+                <h3 class="text-themecolor">Service Completed</h3>
             </div>
             <div class="col-md-7 align-self-center">
                 <button type="button" @click="showModal()" class="btn waves-effect waves-light btn btn-info pull-right hidden-sm-down text-white">
@@ -25,6 +25,14 @@
                             <data-table class="mt-2" :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
                                 <tbody>
                                     <tr class="tr-shadow" v-for="(list, idx) in service_request" :key="idx">
+                                         <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-info text-white btn-sm" @click="consultation(list)" data-toggle="tooltip" title="Consult">
+                                                    <i class="fa fa-eye"></i> View
+                                                </button>
+                                                
+                                            </div>
+                                        </td>
                                         <td class="text-info">
                                             <strong>
                                             {{ list.last_name}}, {{ list.first_name }} {{ list.middle_name }}
@@ -35,18 +43,8 @@
                                         <td>{{ list.schedule.healthworker.first_name }} {{ list.schedule.healthworker.last_name }}</td>
                                         <td>{{ list.message }}</td>
                                         <td>{{ formatDate(list.created_at) }}</td>
-                                        <td>{{ list.status }}</td>
-                                        <td>
-                                            <div class="btn-group">
-                                                <button class="btn btn-info text-white btn-sm" @click="consultation(list)" data-toggle="tooltip" title="Consult">
-                                                    <i class="fa fa-user-md"></i> Consultation
-                                                </button>
-                                                 <button class="btn btn-warning text-white btn-sm" @click="showModalAbsent(list)" data-toggle="tooltip" title="Consult">
-                                                    <i class="fa fa-times"></i> Absent
-                                                </button>
-                                                
-                                            </div>
-                                        </td>
+                                        <td>{{ xtractStatus(list.status) }}</td>
+                                       
                                     </tr>
                                     <tr> 
                                         <td colspan="11" v-show="!noData(service_request)">
@@ -186,6 +184,7 @@ export default {
 
         let sortOrders = {};
         let columns =[
+        {label:'ACTION', name:null},
         {label:'PATIENT', name:null},
         {label:'MEDICAL SERVICES', name:null},
         {label:'SCHEDULE', name:null},
@@ -193,7 +192,6 @@ export default {
         {label:'MESSAGE', name:null},
         {label:'DATE', name:null},
         {label:'STATUS', name:null},
-        {label:'ACTION', name:null},
         ];
         
         columns.forEach(column=>{
@@ -390,7 +388,7 @@ export default {
             return  month+ "-" + day  + "-" + year;
         },
         consultation(data){
-            this.$router.push({name:'consultation', params:{'id':data.id}});
+            this.$router.push({name:'viewcompleted', params:{'id':data.id}});
         },
         confirmMark(){
             this.$axios.get('sanctum/csrf-cookie').then(response=>{
@@ -461,6 +459,9 @@ export default {
 
             return txt;
         },
+        xtractStatus(num){
+            return num == 0 ? "Pending" : num == 1 ?  "Completed" : num == 2 ? "Cancelled": num == 3 ? "Absent" : "";
+        }
 
     },
     mounted() {

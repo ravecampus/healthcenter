@@ -1,18 +1,14 @@
 <template>
     <div id="main-wrapper">
-        <header class="topbar">
+        <header class="topbar d-print-none">
             <nav class="navbar top-navbar navbar-expand-md navbar-light">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="index.html">
-                            <b>
-                                <h4 class="dark-logo"><strong>HC</strong> &nbsp;</h4>
-                            <!-- <img src="assets/images/logo-icon.png" alt="homepage" class="dark-logo" /> -->
-                            <!-- <img src="assets/images/logo-light-icon.png" alt="homepage" class="light-logo" /> -->
+                        <b>
+                            <h4 class="dark-logo"><strong>HC</strong> &nbsp;</h4>
                         </b>
                         <span>
                             <small>Health Center</small>
-                            <!-- <img src="assets/images/logo-text.png" alt="homepage" class="dark-logo" />
-                            <img src="assets/images/logo-light-text.png" class="light-logo" alt="homepage" /> -->
                         </span>
                     </a>
                 </div>
@@ -20,12 +16,9 @@
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up waves-effect waves-dark"
                                 href="javascript:void(0)"><i class="fa fa-bars"></i></a> </li>
-                        <li class="nav-item hidden-xs-down search-box"> <a
-                                class="nav-link hidden-sm-down waves-effect waves-dark" href="javascript:void(0)"><i
-                                    class="fa fa-search"></i></a>
-                            <form class="app-search">
-                                <input type="text" class="form-control" placeholder="Search & enter"> <a
-                                    class="srh-btn"><i class="fa fa-times"></i></a> </form>
+                        <li class="hidden-xs-down search-box"> 
+                            <h4 class="nav-link hidden-sm-down waves-effect waves-dark">BARANGAY UGALINGAN</h4>
+                             <small>Carmen, North Cotabato</small>
                         </li>
                     </ul>
                     <ul class="navbar-nav my-lg-0">
@@ -34,19 +27,23 @@
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
                                     :src="'/profile.png'" alt="user" class="" /> <span
                                     class="hidden-md-down">{{ user.first_name}} {{ user.last_name }} &nbsp;</span> </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown"></ul>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-item">
+                                    <a href="#" @click="logout()">Logout</a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
             </nav>
         </header>
     
-        <aside class="left-sidebar">
+        <aside class="left-sidebar d-print-none">
             <div class="scroll-sidebar">
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-                        <li> <a class="waves-effect waves-dark" href="index.html" aria-expanded="false"><i
-                                    class="fa fa-tachometer"></i><span class="hide-menu">Dashboard</span></a>
+                        <li> <router-link class="waves-effect waves-dark" :to="{name:'userhome'}" aria-expanded="false"><i
+                                    class="fa fa-home"></i><span class="hide-menu">Home</span></router-link>
                         </li>
                         <li> <router-link class="waves-effect waves-dark" :to="{name:'userprofile'}" aria-expanded="false"><i
                                     class="fa fa-user-circle-o"></i><span class="hide-menu">Profile</span></router-link>
@@ -54,24 +51,9 @@
                         <li> <router-link class="waves-effect waves-dark" :to="{name:'userrequest'}" aria-expanded="false"><i
                                     class="fa fa-send"></i><span class="hide-menu">Request</span></router-link>
                         </li>
-                        <!-- <li> <router-link class="waves-effect waves-dark" :to="{name:'medicines'}" aria-expanded="false"><i
-                                    class="fa fa-gear"></i><span class="hide-menu">Medicines</span></router-link>
+                       <li> <router-link class="waves-effect waves-dark" :to="{name:'usermedication'}" aria-expanded="false"><i
+                                    class="fa fa-medkit"></i><span class="hide-menu">Medication</span></router-link>
                         </li>
-                        <li> <router-link class="waves-effect waves-dark" :to="{name:'healthworker'}" aria-expanded="false"><i
-                                    class="fa fa-users"></i><span class="hide-menu">Health Workers</span></router-link>
-                        </li>
-                        <li> <router-link class="waves-effect waves-dark" :to="{name:'schedule'}" aria-expanded="false"><i
-                                    class="fa fa-calendar"></i><span class="hide-menu">Schedule</span></router-link>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="map-google.html" aria-expanded="false"><i
-                                    class="fa fa-globe"></i><span class="hide-menu">Map</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-blank.html" aria-expanded="false"><i
-                                    class="fa fa-bookmark-o"></i><span class="hide-menu">Blank</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="#" @click="logout()" aria-expanded="false"><i
-                                    class="fa fa-question-circle"></i><span class="hide-menu">Logout</span></a>
-                        </li> -->
                     </ul>
                     
                 </nav>
@@ -79,10 +61,10 @@
             
         </aside>
         <flashmessage :message="message" :status="status"></flashmessage>
-        <div class="page-wrapper">
+        <div class="page-wrapper n-pad-0">
             <router-view @show="flashMessage"></router-view>
 
-            <footer class="footer"> © 2023 winsdev<a href="#"></a> </footer>
+            <footer class="footer d-print-none"> © 2023 winsdev<a href="#"></a> </footer>
 
         </div>
     </div>

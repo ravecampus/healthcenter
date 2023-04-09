@@ -15,5 +15,7 @@ class Consultation extends Model
         'remarks',
         'consultant'
     ];
-
+    public function healthworker(){
+        return $this->hasOne(User::class, 'id', 'consultant');
+    }
 }

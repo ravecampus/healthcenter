@@ -15,10 +15,17 @@ import Patient from '../admin/Patient';
 import Consultation from '../admin/Consultation';
 import Purok from '../admin/Purok';
 import Completed from '../admin/CompletedSR';
+import ViewCompleted from '../admin/ViewComplete';
+import PreviousMedication from '../admin/PreviousMedication';
+import Dashboard from '../admin/Dashboard';
+import Users from '../admin/Users';
 
 import User from '../user/Mainpage';
 import UserProfile from '../user/Profile';
 import UserRequest from '../user/Request';
+import UserMedication from '../user/Medication';
+import ViewMedication from '../user/ViewMedication';
+import UserHome from '../user/Home';
 
 
 
@@ -32,19 +39,22 @@ export const routes = [
         name: 'login',
         path: '/login',
         component: Login,
-
     },
     {
         name: 'signup',
         path: '/signup',
         component: Signup,
-
     },
     {
         name: 'user',
         path: '/user',
         component: User,
         children:[
+            {
+                name:'userhome',
+                path:'',
+                component: UserHome,
+            },
             {
                 name: 'userprofile',
                 path: 'profile',
@@ -54,6 +64,16 @@ export const routes = [
                 name: 'userrequest',
                 path: 'request',
                 component: UserRequest,
+            },
+            {
+                name: 'usermedication',
+                path: 'medication',
+                component: UserMedication,
+            },
+            {
+                name: 'userviewmedication',
+                path: 'view-medication/:id',
+                component: ViewMedication,
             }
         ]
 
@@ -63,6 +83,16 @@ export const routes = [
         path: '/admin',
         component: Admin,
         children:[
+            {
+                name: 'dashboard',
+                path: '',
+                component: Dashboard,
+            },
+            {
+                name: 'users',
+                path: 'users',
+                component: Users,
+            },
             {
                 name: 'medicalservice',
                 path: 'medical-service',
@@ -113,6 +143,16 @@ export const routes = [
                 path: 'completed-sr',
                 component: Completed,
             },
+            {
+                name: 'viewcompleted',
+                path: 'view-completed/:id',
+                component: ViewCompleted,
+            },
+            {
+                name: 'previousmedication',
+                path: 'previous-medication/:id',
+                component: PreviousMedication,
+            },
 
         ]
     },
@@ -127,7 +167,19 @@ const router = createRouter({
 });
 const openRoutes = [
     'login',
+    'signup',
     'home',
+];
+
+const userRoutes = [
+    'usermedication',
+    'userviewmedication',
+    'user',
+    'userprofile',
+    'userrequest',
+    'userhome'
+];
+const adminRoutes = [
     'admin',
     'medicalservice',
     'servicerequest',
@@ -135,24 +187,14 @@ const openRoutes = [
     'schedule',
     'profile',
     'medicines',
-    'signup',
-    'user',
-    'userprofile',
-    'userrequest',
     'patients',
     'consultation',
     'purok',
     'completed',
-    
-];
-
-const userRoutes = [
-
-    
-   
-];
-const adminRoutes = [
-
+    'viewcompleted',
+    'previousmedication',
+    'dashboard',
+    'users'
 ];
 
 

@@ -6,7 +6,8 @@
               
                 <div class="col-md-8 col-lg-8 col-xl-8 offset-xl-1">
                     <form>
-                    <h3 class="text-center">{{ title }}</h3>
+                    <h3 class="text-center">BARANGAY UGALINGAN HEALTH CENTER</h3>
+                    <h5 class="text-center">Carmen, North Cotabato</h5>
                     <div class="divider d-flex align-items-center my-4 mb-4">
                         <h4 class="text-center fw-bold mx-3 mb-0">SIGN UP</h4>
                     </div>

@@ -1,22 +1,18 @@
 <template>
     <div class="container-fluid">
             
-        <div class="row page-titles">
+        <div class="row page-titles d-print-none mb-0">
             <div class="col-md-5 align-self-center">
                 <h3 class="text-themecolor">Consultation</h3>
+               
             </div>
-            <!-- <div class="col-md-7 align-self-center">
-                <button type="button" @click="showModal()" class="btn waves-effect waves-light btn btn-info pull-right hidden-sm-down text-white">
-                    <i class="fa fa-plus"></i> Check Up
-                </button>
-            </div> -->
         </div>
-           <div class="row mt-0">
-            <div class="col-12 d-none d-print-block">
+        <div class="row mt-0" v-if="service.id != undefined">
+            <div class="col-12 text-center d-none d-print-block">
                 <h4>BARANGAY UGALINGAN HEALTH CENTER</h4>
                 <h5>Barangay Ugalingan, Carmen North Cotabato</h5>
             </div>
-            <div class="col-12 row mt-4 p-4" v-if="service.id != undefined">
+            <div class="col-12 row mt-4 p-4">
                <div class="col-6">
                     <div class="h6"><small>NAME:</small> {{ service.patient.first_name }} {{ service.patient.middle_name }} {{ service.patient.last_name}}</div>
                      <div class="h6"><small>GENDER:</small> {{ extractGender(service.patient.gender) }}</div>
@@ -33,7 +29,16 @@
                </div>
                <hr>
                 <div class="col-6 d-flex justify-content-between">
-                     <div class="h6"><small>MEDICAL SERVICE:</small> {{ service.medical_service.description  }}</div>
+                    <div>
+                        <div class="h6"><small>MEDICAL SERVICE:</small> {{ service.medical_service.description  }}</div>
+                        <div class="h6"><small>CONSULTANT:</small> {{ service.consulted.healthworker.first_name  }} {{ service.consulted.healthworker.last_name }}</div>
+                        <div class="h6"><small>DATE:</small> {{ formatDate(service.consulted.created_at)  }}</div>
+                     </div>
+                     <div>
+                        <button type="button" @click="print()" class="btn btn-info text-white d-print-none">
+                            <i class="fa fa-print"></i> Print
+                        </button>
+                     </div>
                </div>
            
             </div>
@@ -42,14 +47,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <h6 v-if="cons"> Click consult to proceed!</h6>
-                        <button type="button" v-if="cons" @click="consult()" class="btn btn-info text-white">
-                            {{btncap}}
-                        </button>
-                        <button type="button" v-if="!cons"  @click="showModal()" class="btn btn-info text-white">
-                           <i class="fa fa-plus"></i> Add Diagnosis
-                        </button>
-                        <div class="table-responsive mt-5" v-if="!cons">
+                     
+                        <div class="table-responsive" v-if="!cons">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -57,7 +56,7 @@
                                         <th>SYMTOMS</th>
                                         <th>MEDICINES </th>
                                         <!-- <th>PRESCRIPTION</th> -->
-                                        <th>ACTION</th>
+                                        <!-- <th>ACTION</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -66,18 +65,18 @@
                                         <td>{{ list.symtoms }}</td>
                                         <td> 
                                             <div class="d-flex justify-content-between">
-                                                 <h5>List of Items</h5>
-                                                <button type="button" @click="showModalMed(list)" class="btn btn-sm btn-info text-white">add</button>
+                                                 <!-- <h5>List of Items</h5> -->
+                                                <!-- <button type="button" @click="showModalMed(list)" class="btn btn-sm btn-info text-white">add</button> -->
                                                
                                             </div>
-                                            <hr class="mb-0">
-                                            <table class="table">
+                                            <!-- <hr class="mb-0"> -->
+                                            <table class="table table-bordered">
                                                 <thead>
                                                     <tr>
                                                         <th>Name</th>
                                                         <th>Quantity</th>
                                                         <th>Prescription</th>
-                                                        <th>Action</th>
+                                                        <!-- <th>Action</th> -->
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -87,7 +86,7 @@
                                                         <td>Take {{ ls.times }} times a {{ ls.every_take }}
                                                             <p>Note: {{ls.note}}</p>
                                                         </td>
-                                                        <td>
+                                                        <!-- <td>
                                                             <div class="btn-group">
                                                                 <button type="button" @click="editDM(ls)" class="btn btn-info text-white btn-sm">
                                                                     <i class="fa fa-pencil"></i> Edit
@@ -96,17 +95,17 @@
                                                                     <i class="fa fa-trash"></i> Delete
                                                                 </button>
                                                             </div>
-                                                        </td>
+                                                        </td> -->
                                                     </tr>
                                                     
                                                 </tbody>
                                             </table>
                                        </td>
-                                        <td>
+                                        <!-- <td>
                                             <button type="button" @click="editModal(list)" class="btn btn-info text-white btn-sm">
                                                 <i class="fa fa-pencil"></i> Edit
                                             </button>
-                                        </td>
+                                        </td> -->
                                     </tr>
                                     <tr> 
                                         <td colspan="4" v-show="!noData(diagnosis)">
@@ -116,9 +115,14 @@
                                 </tbody>
                             </table>
                         </div>
-                        <button type="button" v-if="diagnosis.length > 0" @click="completeDiagnosis()" class="btn btn-info text-white">Complete</button>
+                        <!-- <button type="button" v-if="diagnosis.length > 0" @click="completeDiagnosis()" class="btn btn-info text-white">Complete</button> -->
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 d-none d-print-block">
+               Printed Date: {{ formatDate(new Date())}}
             </div>
         </div>
 
@@ -233,9 +237,6 @@
                 </div>
             </div>
         </div>
-
-
-
     </div>
 </template>
 
@@ -247,6 +248,13 @@ export default {
             post_:{
                 medicine:{}
             },
+            service:{
+                patient:{},
+                medical_service:{},
+                consulted:{
+                    healthworker:{}
+                }
+            },
             errors:[],
             cons:true,
             btncap:"Consult?",
@@ -256,10 +264,6 @@ export default {
             diagnosis:[],
             medicines:[],
             puroks:[],
-            service:{
-                patient:{},
-                medical_service:{}
-            }
         }
     },
     methods: {
@@ -435,7 +439,7 @@ export default {
                 });
             });
         },
-         getServiceRequest(){
+        getServiceRequest(){
             let id = this.$route.params.id;
             this.$axios.get('sanctum/csrf-cookie').then(response=>{
                 this.$axios.get('api/service-request/'+id).then(res=>{
@@ -483,6 +487,9 @@ export default {
            });
            return ret;
        }, 
+       print(){
+           window.print();
+       }
         
 
     },
@@ -493,6 +500,7 @@ export default {
         this.listDiagnos(id);
         this.listMedicine();
         this.getServiceRequest();
+       
     },
 
 }

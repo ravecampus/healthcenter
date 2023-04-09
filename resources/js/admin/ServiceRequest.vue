@@ -35,7 +35,9 @@
                                         <td>{{ list.schedule.healthworker.first_name }} {{ list.schedule.healthworker.last_name }}</td>
                                         <td>{{ list.message }}</td>
                                         <td>{{ formatDate(list.created_at) }}</td>
-                                        <td>{{ list.status }}</td>
+                                        <td class="text-warning">
+                                            <strong> {{ xtractStatus(list.status) }} </strong>
+                                        </td>
                                         <td>
                                             <div class="btn-group">
                                                 <button class="btn btn-info text-white btn-sm" @click="consultation(list)" data-toggle="tooltip" title="Consult">
@@ -461,6 +463,10 @@ export default {
 
             return txt;
         },
+
+        xtractStatus(num){
+            return num == 0 ? "Pending" : num == 1 ?  "Completed" : num == 2 ? "Cancelled": num == 3 ? "Absent" : "";
+        }
 
     },
     mounted() {

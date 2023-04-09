@@ -86,7 +86,8 @@ class ServiceRequestController extends Controller
      */
     public function show($id)
     {
-        //
+        $service = ServiceRequest::with('patient', 'medical_service','consulted')->find($id);
+        return response()->json($service, 200);
     }
 
     /**
@@ -127,7 +128,9 @@ class ServiceRequestController extends Controller
     
         $length = $request->length;
         $searchValue = $request->search;
-        $query = ServiceRequest::with('schedule', 'medical_service')->orderBy('created_at', 'desc');
+        $query = ServiceRequest::with('schedule', 'medical_service','consulted')
+        ->where('status', 0)
+        ->where('user_id', Auth::id())->orderBy('created_at', 'desc');
     
         if($searchValue){
             $query->where(function($query) use ($searchValue){
@@ -168,6 +171,14 @@ class ServiceRequestController extends Controller
         return response()->json($sereq, 200);
     }
 
+    public function confirmCancel($id){
+        $sereq = ServiceRequest::find($id);
+        $sereq->status = 2;
+        $sereq->save();
+        return response()->json($sereq, 200);
+    }
+
+
     public function completedSR(Request $request){
 
         $length = $request->length;
@@ -189,6 +200,33 @@ class ServiceRequestController extends Controller
                 $query->where('users.last_name', 'like', '%'.$searchValue.'%')
                 ->orWhere('users.first_name', 'like', '%'.$searchValue.'%')
                 ->orWhere('users.middle_name', 'like', '%'.$searchValue.'%');
+            });
+        }
+        $projects = $query->paginate($length);
+        return ['data'=>$projects, 'draw'=> $request->draw];
+    }
+
+    public function previousMed($id){
+        $service = ServiceRequest::with('medical_service','consulted', 'schedule')
+        ->where('user_id', $id)
+        ->where('status', 1)
+        ->orderBy('created_at', 'desc')
+        ->get();
+        return response()->json($service, 200);
+    }
+
+    public function doneMedication(Request $request){
+        $length = $request->length;
+        $searchValue = $request->search;
+        $query = ServiceRequest::with('schedule', 'medical_service', 'consulted')
+        ->where('status', 1)
+        ->orWhere('status', 2)
+        ->orWhere('status', 3)
+        ->where('user_id', Auth::id())->orderBy('created_at', 'desc');
+    
+        if($searchValue){
+            $query->where(function($query) use ($searchValue){
+                // $query->where('medicine_name', 'like', '%'.$searchValue.'%');
             });
         }
         $projects = $query->paginate($length);

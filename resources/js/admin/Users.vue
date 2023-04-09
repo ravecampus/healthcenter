@@ -3,11 +3,7 @@
             
         <div class="row page-titles">
             <div class="col-md-5 align-self-center">
-                <h3 class="text-themecolor">Health Workers</h3>
-                <!-- <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                    <li class="breadcrumb-item active">Blank Page</li>
-                </ol> -->
+                <h3 class="text-themecolor">Users</h3>
             </div>
             <div class="col-md-7 align-self-center">
                 <button type="button" @click="showModal()" class="btn waves-effect waves-light btn btn-info pull-right hidden-sm-down text-white">
@@ -28,16 +24,19 @@
                         <div class="table-responsive">
                             <data-table class="mt-2" :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
                                 <tbody>
-                                    <tr class="tr-shadow" v-for="(list, idx) in hworkers" :key="idx">
+                                    <tr class="tr-shadow" v-for="(list, idx) in users" :key="idx">
                                         <td class="text-info">
                                             <strong>
                                             {{ list.last_name}}, {{ list.first_name }} {{ list.middle_name }}
                                             </strong>
                                         </td>
-                                        <td>{{ extractPostion(list.position) }}</td>
-                                        <td>{{ list.contact_number }}</td>
+                                        <td>{{ extractRole(list.role) }}</td>
+                                        <td>{{ list.username }}</td>
                                         <td>
-                                            <div class="table-data-feature">
+                                            <div class="btn-group">
+                                                <button class="btn btn-primary text-white btn-sm" data-toggle="tooltip" @click="changePassword(list)" title="Change Password">
+                                                    <i class="fa fa-asterisk"></i> Password
+                                                </button>
                                                 <button class="btn btn-info text-white btn-sm" data-toggle="tooltip" @click="editModal(list)" title="Edit">
                                                     <i class="fa fa-pencil"></i> Edit
                                                 </button>
@@ -46,7 +45,7 @@
                                         </td>
                                     </tr>
                                     <tr> 
-                                        <td colspan="4" v-show="!noData(hworkers)">
+                                        <td colspan="4" v-show="!noData(users)">
                                             No Result Found!
                                         </td>
                                     </tr>
@@ -57,9 +56,9 @@
                         </div>
                         <div>
                             <pagination :pagination="pagination"
-                                @prev="listOfHWorker(pagination.prevPageUrl)"
-                                @next="listOfHWorker(pagination.nextPageUrl)"
-                                v-show="noData(hworkers)">
+                                @prev="listOfUser(pagination.prevPageUrl)"
+                                @next="listOfUser(pagination.nextPageUrl)"
+                                v-show="noData(users)">
                             </pagination>
                         </div>
                     </div>
@@ -91,19 +90,38 @@
                                     <input type="text" v-model="post.last_name" class="form-control form-control-user" placeholder="Enter Lastname">
                                     <span class="errors-material" v-if="errors.last_name">{{errors.last_name[0]}}</span>
                                 </div>
-                                   <div class="form-group mb-3">
-                                    <label>Position</label>
-                                    <select class="form-control" v-model="post.position">
-                                        <option value="1">Nurse</option>
-                                        <option value="2">Midwife</option>
-                                    </select>
-                                    <span class="errors-material" v-if="errors.position">{{errors.position[0]}}</span>
-                                </div>
                                 <div class="form-group mb-3">
+                                    <label>Role</label>
+                                    <select class="form-control" v-model="post.role">
+                                        <option value="1">Health Worker</option>
+                                        <option value="2">Admin</option>
+                                    </select>
+                                    <span class="errors-material" v-if="errors.last_name">{{errors.last_name[0]}}</span>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <small>Account: </small>
+                                    <div class="form-group col-12 mb-3">
+                                        <label>Username</label>
+                                        <input type="text" v-model="post.username" class="form-control form-control-user" placeholder="Enter Username">
+                                        <span class="errors-material" v-if="errors.username">{{errors.username[0]}}</span>
+                                    </div>
+                                    <div class="form-group col-6 mb-3" v-if="post.id == undefined">
+                                        <label>Password</label>
+                                        <input type="password" v-model="post.password" class="form-control form-control-user" placeholder="Enter Password">
+                                        <span class="errors-material" v-if="errors.password">{{errors.password[0]}}</span>
+                                    </div>
+                                    <div class="form-group col-6 mb-3" v-if="post.id == undefined">
+                                        <label>Password Confirmation</label>
+                                        <input type="password" v-model="post.password_confirmation" class="form-control form-control-user" placeholder="Enter Password Confirmation">
+                                        <span class="errors-material" v-if="errors.password_confirmation">{{errors.password_confirmation[0]}}</span>
+                                    </div>
+                                </div>
+                                <!-- <div class="form-group mb-3">
                                     <label>Contact Number</label>
                                     <input type="text" v-model="post.contact_number" class="form-control form-control-user" placeholder="Enter Contact Number">
                                     <span class="errors-material" v-if="errors.contact_number">{{errors.contact_number[0]}}</span>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -118,6 +136,32 @@
             </div>
         </div>
 
+        <div class="modal fade change-pass">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6>Change Password</h6>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="password" v-model="post.password" class="form-control" placeholder="New Password">
+                                    <span class="errors-material" v-if="errors.password">{{errors.password[0]}}</span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" v-model="post.password_confirmation" class="form-control" placeholder="Password Confirmation">
+                                    <span class="errors-material" v-if="errors.password_confirmation">{{errors.password_confirmation[0]}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" @click="confirmPassword()" class="btn btn-info text-white btn-block" >Save</button>  
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </template>
@@ -136,8 +180,8 @@ export default {
         let sortOrders = {};
         let columns =[
         {label:'Fullname', name:null},
-        {label:'Position', name:null},
-        {label:'Contact Number', name:null},
+        {label:'Role', name:null},
+        {label:'Username', name:null},
         {label:'Action', name:null},
         ];
         
@@ -148,7 +192,7 @@ export default {
             btncap:"Save",
             post:{},
             errors:[],
-            hworkers:[],
+            users:[],
             columns:columns,
             sortOrders:sortOrders,
             sortKey:'created_at',
@@ -181,18 +225,23 @@ export default {
            $('.item').modal('show');
        },
        editModal(data){
+           this.errors = [];
            this.post = data;
            $('.item').modal('show');           
+       },
+       changePassword(data){
+           this.post = data;
+           $('.change-pass').modal('show');
        },
        saveItem(){
         if(this.post.id > 0){
             this.$axios.get('sanctum/csrf-cookie').then(response=>{
                this.btncap = "Saving...";
-               this.$axios.put('api/health-worker/'+this.post.id, this.post).then(res=>{
+               this.$axios.put('api/admin/'+this.post.id, this.post).then(res=>{
                    this.btncap = "Save";
-                   this.$emit('show',{'message':'Health Worker has been modified!'});
+                   this.$emit('show',{'message':'User has been modified!'});
                    this.post = {};
-                   this.listOfHWorker();
+                   this.listOfUser();
                    $('.item').modal('hide');
                }).catch(err=>{
                    this.btncap = "Save";
@@ -202,11 +251,11 @@ export default {
         }else{
             this.$axios.get('sanctum/csrf-cookie').then(response=>{
                this.btncap = "Saving...";
-               this.$axios.post('api/health-worker', this.post).then(res=>{
+               this.$axios.post('api/admin', this.post).then(res=>{
                    this.btncap = "Save";
                    this.post = {};
-                   this.$emit('show',{'message':'Health Worker has been saved!'});
-                   this.listOfHWorker();
+                   this.$emit('show',{'message':'User has been saved!'});
+                   this.listOfUser();
                    $('.item').modal('hide');
                }).catch(err=>{
                    this.btncap = "Save";
@@ -216,13 +265,13 @@ export default {
         }
           
        },
-        listOfHWorker(urls='api/health-worker'){
+        listOfUser(urls='api/admin'){
             this.$axios.get('sanctum/csrf-cookie').then(response => {
                 this.tableData.draw ++;
                 this.$axios.get(urls,{params:this.tableData}).then(res=>{
                 let data = res.data;
                     if(this.tableData.draw == data.draw){
-                        this.hworkers = data.data.data;
+                        this.users = data.data.data;
                         this.configPagination(data.data);
                     }else{
                         this.not_found = true;
@@ -249,7 +298,7 @@ export default {
                 this.sortOrders[key] = this.sortOrders[key] * -1;
                 this.tableData.column = this.getIndex(this.columns, 'name', key);
                 this.tableData.dir = this.sortOrders[key] === 1 ? 'asc' : 'desc';
-                this.listOfHWorker();
+                this.listOfUser();
             }
         },
         getIndex(array, key, value){
@@ -258,12 +307,26 @@ export default {
         noData(data){
             return data == undefined ? true : (data.length > 0) ? true : false;
         },
-        extractPostion(num){
-            return num == 1 ? "Nurse" : "Midwife";
-        }
+        extractRole(num){
+            return num == 1 ? "Health Worker" : "Admin";
+        },
+         confirmPassword(){
+            this.$axios.get('sanctum/csrf-cookie').then(response=>{
+                    // this.btncap = "Saving..."
+                    this.$axios.post('api/auth-password/',this.post).then(res=>{
+                        this.pass = { };
+                        // this.$emit('show',{'message':'Password has been changed!'});
+                         $('.change-pass').modal('hide');
+                        this.errors = [];
+                    }).catch(err=>{
+                        // this.btncap = "Save Changes"
+                        this.errors = err.response.data.errors
+                    });
+                });
+        },
     },
     mounted() {
-        this.listOfHWorker();
+        this.listOfUser();
     },
 }
 </script>

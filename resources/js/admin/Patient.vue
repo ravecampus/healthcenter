@@ -29,6 +29,16 @@
                             <data-table class="mt-2" :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
                                 <tbody>
                                     <tr class="tr-shadow" v-for="(list, idx) in patients" :key="idx">
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn btn-info text-white btn-sm" data-toggle="tooltip" @click="editModal(list)" title="Edit">
+                                                    <i class="fa fa-pencil"></i> Edit
+                                                </button>
+                                                <button class="btn btn-primary text-white btn-sm" @click="previousMed(list)" data-toggle="tooltip" title="Edit">
+                                                    <i class="fa fa-eye"></i> Previous Medication
+                                                </button>
+                                            </div>
+                                        </td>
                                         <td class="text-info">
                                             <strong>
                                             {{ list.last_name}}, {{ list.first_name }} {{ list.middle_name }}
@@ -43,14 +53,7 @@
                                         <td>{{ list.contact_number }}</td>
                                         <td>{{ xtractPurok(list.purok) }}</td>
                                         <td>{{ list.email }}</td>
-                                        <td>
-                                            <div class="table-data-feature">
-                                                <button class="btn btn-info text-white btn-sm" data-toggle="tooltip" @click="editModal(list)" title="Edit">
-                                                    <i class="fa fa-pencil"></i> Edit
-                                                </button>
-                                                
-                                            </div>
-                                        </td>
+                                        
                                     </tr>
                                     <tr> 
                                         <td colspan="11" v-show="!noData(patients)">
@@ -222,6 +225,7 @@ export default {
 
         let sortOrders = {};
         let columns =[
+         {label:'ACTION', name:null},
         {label:'FULLNAME', name:null},
         {label:'GENDER', name:null},
         {label:'CIVIL STATUS', name:null},
@@ -232,7 +236,7 @@ export default {
         {label:'CONTACT NUMBER', name:null},
         {label:'PUROK', name:null},
         {label:'EMAIL', name:null},
-        {label:'ACTION', name:null},
+       
         ];
         
         columns.forEach(column=>{
@@ -395,6 +399,9 @@ export default {
                }
            });
            return ret;
+       },
+       previousMed(data){
+           this.$router.push({name:'previousmedication', params:{'id':data.id}});
        }
     },
     mounted() {

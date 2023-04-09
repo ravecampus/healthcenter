@@ -9,7 +9,8 @@
                 </div>
                 <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
                     <form>
-                    <h3 class="text-center">{{ title }}</h3>
+                    <h3 class="text-center">BARANGAY UGALINGAN HEALTH CENTER</h3>
+                    <h5 class="text-center">Carmen, North Cotabato</h5>
                     <div class="divider d-flex align-items-center my-4">
                         <h4 class="text-center fw-bold mx-3 mb-0">SIGN IN</h4>
                     </div>
@@ -91,7 +92,7 @@ export default {
                     if(data.role == 1 ||data.role == 2){
                         window.location.href="/admin";
                     }else{
-                        window.location.href="/student";
+                        window.location.href="/user";
                     }
                     this.btncap = "SIGN IN";
                 }).catch(err=>{
@@ -109,9 +110,9 @@ export default {
             let user = window.Laravel.user;
             this.auth = true;
             if(user.role == 1 || user.role == 2){
-                // this.$router.push({name:'dashboard'})
+                this.$router.push({name:'dashboard'})
             }else {
-            //    this.$router.push({name:'studenthome'})
+               this.$router.push({name:'user'})
 			}
         }
        

@@ -28,4 +28,7 @@ class ServiceRequest extends Model
     public function patient(){
         return $this->hasOne(User::class, 'id', 'user_id');
     }
+    public function consulted(){
+        return $this->hasOne(Consultation::class, 'service_request_id', 'id')->with('healthworker');
+    }
 }
