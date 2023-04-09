@@ -32,7 +32,7 @@ Route::post('auth-password', [AuthController::class, 'changePassword']);
 Route::post('auth-signin', [AuthController::class, 'signin']);
 Route::resource('auth', AuthController::class);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-
+Route::resource('purok',PurokController::class);
 
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -58,7 +58,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('check-consult/{id}', [ConsultationController::class,'checkConsult']);
     Route::resource('consultation', ConsultationController::class);
     Route::resource('diagnosis', DiagnosisController::class);
-    Route::resource('purok',PurokController::class);
     Route::resource('medicine-dispense',MedicineDispenseController::class);
     Route::get('dashboard',[DashboardController::class,'numberOfDash']);
     Route::resource('admin',AdministratorController::class);
