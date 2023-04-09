@@ -18,17 +18,17 @@
                     </div>
                     <div class="row mt-4">
                         <div class="form-outline mb-4 col-6">
-                            <input type="text" id="form3Example3" @keyup.enter="signup" v-model="post.first_name" class="form-control"
+                            <input type="text" autocomplete="off" @keyup.enter="signup" v-model="post.first_name" class="form-control"
                             placeholder="Enter First name" />
-                            <label class="form-label" for="form3Example3">First name</label>
+                            <label class="form-label" >First name</label>
                             <div>
                                 <span class="errors-material" v-if="errors.first_name">{{errors.first_name[0]}}</span>
                             </div>
                         </div>
                         <div class="form-outline mb-4 col-6">
-                            <input type="text" id="form3Example3" @keyup.enter="signup" v-model="post.middle_name" class="form-control"
+                            <input type="text" autocomplete="off" @keyup.enter="signup" v-model="post.middle_name" class="form-control"
                             placeholder="Enter Middle name" />
-                            <label class="form-label" for="form3Example3">Middle name</label>
+                            <label class="form-label">Middle name</label>
                             <div>
                                 <span class="errors-material" v-if="errors.middle_name">{{errors.middle_name[0]}}</span>
                             </div>
@@ -36,9 +36,9 @@
                     </div>
                     <div class="row">
                         <div class="form-outline mb-4 col-6">
-                            <input type="text" id="form3Example3" @keyup.enter="signup" v-model="post.last_name" class="form-control"
+                            <input type="text" autocomplete="off" @keyup.enter="signup" v-model="post.last_name" class="form-control"
                             placeholder="Enter Last name" />
-                            <label class="form-label" for="form3Example3">Last name</label>
+                            <label class="form-label">Last name</label>
                             <div>
                                 <span class="errors-material" v-if="errors.last_name">{{errors.last_name[0]}}</span>
                             </div>
@@ -61,15 +61,15 @@
                                 <option :value="4">Annulled</option>
                                 <option :value="5">Widow/er</option>
                             </select>
-                            <label class="form-label" for="form3Example3">Civil Status</label>
+                            <label class="form-label" >Civil Status</label>
                             <div>
                                 <span class="errors-material" v-if="errors.civil_status">{{errors.civil_status[0]}}</span>
                             </div>
                         </div>
                         <div class="form-outline mb-4 col-6">
-                            <input type="text" id="form3Example3" @keyup.enter="signup" v-model="post.occupation" class="form-control"
+                            <input type="text" autocomplete="off" @keyup.enter="signup" v-model="post.occupation" class="form-control"
                             placeholder="Enter Occupation" />
-                            <label class="form-label" for="form3Example3">Occupation</label>
+                            <label class="form-label" >Occupation</label>
                             <div>
                                 <span class="errors-material" v-if="errors.occupation">{{errors.occupation[0]}}</span>
                             </div>
@@ -78,15 +78,15 @@
                     <div class="row">
                         <div class="form-outline mb-4 col-6">
                             <Datepicker v-model="post.birthdate" :format="format"  placeholder="Birthdate" :change="setAge()"/>
-                            <label class="form-label" for="form3Example3">Birthdate</label>
+                            <label class="form-label">Birthdate</label>
                             <div>
                                 <span class="errors-material" v-if="errors.birthdate">{{errors.birthdate[0]}}</span>
                             </div>
                         </div>
                         <div class="form-outline mb-4 col-6">
-                            <input type="text" id="form3Example3" @keyup.enter="signup" v-model="post.birth_place" class="form-control"
+                            <input type="text" autocomplete="off" @keyup.enter="signup" v-model="post.birth_place" class="form-control"
                             placeholder="Enter Birth Place" />
-                            <label class="form-label" for="form3Example3">Birth Place</label>
+                            <label class="form-label">Birth Place</label>
                             <div>
                                 <span class="errors-material" v-if="errors.birth_place">{{errors.birth_place[0]}}</span>
                             </div>
@@ -94,17 +94,17 @@
                     </div>
                     <div class="row">
                         <div class="form-outline mb-4 col-6">
-                            <input type="text" id="form3Example3" readonly @keyup.enter="signup" v-model="post.age" class="form-control"
+                            <input type="text" autocomplete="off" readonly @keyup.enter="signup" v-model="post.age" class="form-control"
                             placeholder="Enter Contact Number">
-                            <label class="form-label" for="form3Example3">Age</label>
+                            <label class="form-label" >Age</label>
                             <div>
                                 <span class="errors-material" v-if="errors.age">{{errors.age[0]}}</span>
                             </div>
                         </div>
                         <div class="form-outline mb-4 col-6">
-                            <input type="text" id="form3Example3" @keyup.enter="signup" v-model="post.contact_number" class="form-control"
+                            <input type="text" autocomplete="off" @keyup.enter="signup" v-model="post.contact_number" class="form-control"
                             placeholder="Enter Contact Number">
-                            <label class="form-label" for="form3Example3">Contact Number</label>
+                            <label class="form-label">Contact Number</label>
                             <div>
                                 <span class="errors-material" v-if="errors.contact_number">{{errors.contact_number[0]}}</span>
                             </div>
@@ -121,7 +121,7 @@
                             </div>
                         </div>
                         <div class="form-outline mb-4 col-6">
-                            <input type="text" id="form3Example3" @keyup.enter="signup" v-model="post.email" class="form-control"
+                            <input type="text" autocomplete="off" @keyup.enter="signup" v-model="post.email" class="form-control"
                             placeholder="Enter a Email" />
                             <label class="form-label" for="form3Example3">Email</label>
                             <div>
@@ -135,7 +135,7 @@
                     
                     <div class="row">
                         <div class="form-outline mb-4 col-6">
-                            <input type="email" id="form3Example3" @keyup.enter="signin" v-model="post.username" class="form-control"
+                            <input type="email" @keyup.enter="signin" v-model="post.username" class="form-control"
                             placeholder="Enter a valid username" />
                             <label class="form-label" for="form3Example3">Username</label>
                             <div>
@@ -145,7 +145,7 @@
                         <div class="col-6"></div>
 
                         <div class="form-outline mb-3 col-6">
-                            <input type="password" id="form3Example4" @keyup.enter="signin"  v-model="post.password" class="form-control"
+                            <input type="password" @keyup.enter="signin"  v-model="post.password" class="form-control"
                             placeholder="Enter password" />
                             <label class="form-label" for="form3Example4">Password</label>
                             <div>
@@ -153,7 +153,7 @@
                             </div>
                         </div>
                         <div class="form-outline mb-3 col-6">
-                            <input type="password" id="form3Example4" @keyup.enter="signin"  v-model="post.password_confirmation" class="form-control"
+                            <input type="password" @keyup.enter="signin"  v-model="post.password_confirmation" class="form-control"
                             placeholder="Enter password confirmation" />
                             <label class="form-label" for="form3Example4">Password Confirmation</label>
                             <div>

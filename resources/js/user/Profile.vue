@@ -131,18 +131,19 @@
                             <div class="form-group col-6">
                                 <label class="col-md-12">Purok</label>
                                 <div class="col-md-12">
-                                    <input type="text" placeholder="Enter Purok" v-model="post.purok"
-                                        class="form-control">
+                                    <select class="form-control" v-model="post.purok">
+                                        <option v-for="(ls, idx) in puroks" :key="idx" :value="ls.id">{{ ls.purok_name }}</option>
+                                    </select>
                                 </div>
                                 <span class="errors-material" v-if="errors.purok">{{errors.purok[0]}}</span>
                             </div>
                             <div class="form-group col-6">
                                 <label class="col-md-12">Email</label>
                                 <div class="col-md-12">
-                                    <input type="text" placeholder="Enter Email" v-model="post.purok"
+                                    <input type="text" placeholder="Enter Email" v-model="post.email"
                                         class="form-control">
                                 </div>
-                                <span class="errors-material" v-if="errors.purok">{{errors.purok[0]}}</span>
+                                <span class="errors-material" v-if="errors.email">{{errors.email[0]}}</span>
                             </div>
                             <div class="form-group col-6">
                                 <label class="col-md-12">Username</label>
@@ -221,6 +222,7 @@ export default {
             teachers:[],
             auth:false,
             btncap:"Update Profile",
+            puroks:[],
         }
     },
     methods: {
@@ -270,8 +272,16 @@ export default {
                 this.post.age = 0;
             }
         },
+        listPurok(){
+           this.$axios.get('sanctum/csrf-cookie').then(response=>{
+               this.$axios.get('api/purok').then(res=>{
+                   this.puroks = res.data;
+               })
+           });
+       },
     },
     mounted(){
+        this.listPurok();
         if(window.Laravel.isLoggedin){
             let user = window.Laravel.user;
             this.post = user;

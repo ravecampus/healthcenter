@@ -83,7 +83,7 @@ class UserController extends Controller
             'civil_status' => 'required',
             'occupation' => 'required|string',
             'contact_number' => 'required',
-            'purok' => 'required|string',
+            'purok' => 'required',
             'email' => 'required|string|email',
             'username' => 'required|string',
             // 'password' => 'required|string|min:6|confirmed',

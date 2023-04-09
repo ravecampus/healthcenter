@@ -78,7 +78,7 @@
                             <div class="form-group">
                                 <label class="col-md-12">Contact Number</label>
                                 <div class="col-md-12">
-                                    <input type="text"
+                                    <input type="text" v-model="post.contact_number"
                                         class="form-control form-control-line">
                                 </div>
                                 <span class="errors-material" v-if="errors.contact_number">{{errors.contact_number[0]}}</span>
