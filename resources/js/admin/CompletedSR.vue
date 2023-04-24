@@ -39,7 +39,7 @@
                                             </strong>
                                         </td>
                                         <td>{{ list.medical_service.description }}</td>
-                                        <td>{{extractTime(list.schedule.start_time) }} - {{ extractTime(list.schedule.end_time) }} |  {{xtractDay(list.schedule.day)}}</td>
+                                        <td>{{extractTime(list.schedule.start_time) }} - {{ extractTime(list.schedule.end_time) }} |  {{xtractDay(list.schedule.day)}}, {{ formatDate(list.schedule.schedule_date) }}</td>
                                         <td>{{ list.schedule.healthworker.first_name }} {{ list.schedule.healthworker.last_name }}</td>
                                         <td>{{ list.message }}</td>
                                         <td>{{ formatDate(list.created_at) }}</td>
@@ -461,7 +461,14 @@ export default {
         },
         xtractStatus(num){
             return num == 0 ? "Pending" : num == 1 ?  "Completed" : num == 2 ? "Cancelled": num == 3 ? "Absent" : "";
-        }
+        },
+        formatDate(da){
+            let d = new Date(da);
+            const day =("0" + d.getDate()).slice(-2);
+            const month = ("0"+(d.getMonth()+1)).slice(-2);
+            const year =  d.getFullYear();
+            return  month+ "-" + day  + "-" + year;
+        },
 
     },
     mounted() {

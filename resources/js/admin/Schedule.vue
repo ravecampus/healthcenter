@@ -75,6 +75,11 @@
                             </div>
                         </div>
                         <div class="form-group">
+                                <label class="control-label">Date:</label>
+                                <Datepicker class="form-control-sm"  v-model="post.schedule_date" placeholder="Date" :format="format"/>
+                                <span class="errors-material" v-if="errors.schedule_date">{{errors.schedule_date[0]}}</span>
+                            </div>
+                        <div class="form-group">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" v-model="post.visible" :value="1" id="visible">
                                 <label class="form-check-label" for="visible">
@@ -128,6 +133,7 @@
                                         <td>{{ xtractDay(list.day) }}</td>
                                        
                                         <td>{{ extractTime(list.start_time) }} - {{ extractTime(list.end_time) }}</td>
+                                        <td>{{ formatDate(list.schedule_date) }}</td>
                                         <td>
                                             <a href="#" @click="visibility(list)"> 
                                                 <i :class="list.visible == 1 ? 'fa fa-eye':'fa fa-eye-slash'"></i>
@@ -199,6 +205,19 @@ export default {
         dataTable:DataTable,
         pagination:PaginationVue
     },
+    setup() {
+        // In case of a range picker, you'll receive [Date, Date]
+        const format = (d) => {
+            const day =("0" + d.getDate()).slice(-2);
+            const month = ("0"+(d.getMonth()+1)).slice(-2);
+            const year =  d.getFullYear();
+
+            return  month+ "-" + day  + "-" + year;
+        }
+        return {
+            format,
+        }
+    },
     data(){
         let sortOrders = {};
         let columns =[
@@ -206,6 +225,7 @@ export default {
         {label:'HEALTH WORKER', name:null},
         {label:'DAYS', name:null},
         {label:'TIME', name:null},
+        {label:'DATE SCHEDULE', name:null},
         {label:'VISIBILITY', name:null},
         ];
         
@@ -435,7 +455,14 @@ export default {
         },
         newPost(){
             this.post = {};
-        }
+        },
+        formatDate(da){
+            let d = new Date(da);
+            const day =("0" + d.getDate()).slice(-2);
+            const month = ("0"+(d.getMonth()+1)).slice(-2);
+            const year =  d.getFullYear();
+            return  month+ "-" + day  + "-" + year;
+        },
 
     },
     mounted() {

@@ -17,6 +17,7 @@ class Schedule extends Model
         'end_time',
         'visible',
         'slot',
+        'schedule_date',
     ];
 
     public function healthworker(){

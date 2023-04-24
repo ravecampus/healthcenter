@@ -31,7 +31,7 @@
                                             </strong>
                                         </td>
                                         <td>{{ list.medical_service.description }}</td>
-                                        <td>{{extractTime(list.schedule.start_time) }} - {{ extractTime(list.schedule.end_time) }} |  {{xtractDay(list.schedule.day)}}</td>
+                                        <td>{{extractTime(list.schedule.start_time) }} - {{ extractTime(list.schedule.end_time) }} |  {{xtractDay(list.schedule.day)}}, {{ formatDate(list.schedule.schedule_date)}}</td>
                                         <td>{{ list.schedule.healthworker.first_name }} {{ list.schedule.healthworker.last_name }}</td>
                                         <td>{{ list.message }}</td>
                                         <td>{{ formatDate(list.created_at) }}</td>
@@ -46,7 +46,9 @@
                                                  <button class="btn btn-warning text-white btn-sm" @click="showModalAbsent(list)" data-toggle="tooltip" title="Consult">
                                                     <i class="fa fa-times"></i> Absent
                                                 </button>
-                                                
+                                                <button class="btn btn-danger text-white btn-sm" @click="cancelService(list)" data-toggle="tooltip" title="Consult">
+                                                    <i class="fa fa-times"></i> Cancel
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -153,6 +155,22 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade cancel-service">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6>Service Request</h6>
+                    </div>
+                    <div class="modal-body">
+                       <h4>Do you want to Cancel Service Request?</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" @click="confirmCancel()" class="btn btn-danger text-white btn-block" >Yes</button>  
+                        <button type="button" @click="cancel()" class="btn btn-info text-white btn-block" >No</button>  
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </template>
@@ -238,6 +256,10 @@ export default {
     methods: {
         cancel(){
             $('.absent').modal('hide');
+        },
+        cancelService(data){
+            this.post = data;
+            $('.cancel-service').modal('show');
         },
         showModalAbsent(data){
             $('.absent').modal('show');
@@ -466,6 +488,16 @@ export default {
 
         xtractStatus(num){
             return num == 0 ? "Pending" : num == 1 ?  "Completed" : num == 2 ? "Cancelled": num == 3 ? "Absent" : "";
+        },
+        confirmCancel(){
+            this.$axios.get('sanctum/csrf-cookie').then(response=>{
+               this.$axios.get('api/confirm-cancel/'+this.post.id).then(res=>{
+                   this.post = {};
+                   this.$emit('show',{'message':'Service Request has been cancelled!'});
+                   this.listOfServices();
+                   $('.cancel-service').modal('hide');
+               });
+           }); 
         }
 
     },

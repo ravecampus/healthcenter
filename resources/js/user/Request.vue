@@ -36,6 +36,7 @@
                                         <tr>
                                             <th></th>
                                             <th>TIME|DAYS</th>
+                                            <th>DATE</th>
                                             <th>HEALTH WORKER</th>
                                         </tr>
                                     </thead>
@@ -51,6 +52,7 @@
                                                 <!-- </div> -->
                                             </td>
                                             <td>{{ extractTime(ls.start_time) }} - {{  extractTime(ls.end_time)}} | {{ xtractDay(ls.day) }}</td>
+                                            <td>{{ formatDate(ls.schedule_date) }}</td>
                                             <td> {{ ls.healthworker.first_name}} {{ ls.healthworker.last_name }}</td>
                                         </tr>
                                     </tbody>
@@ -97,7 +99,7 @@
                                             {{ list.medical_service.description }}
                                             </strong>
                                         </td>
-                                        <td>{{extractTime(list.schedule.start_time) }} - {{ extractTime(list.schedule.end_time) }} |  {{xtractDay(list.schedule.day)}}</td>
+                                        <td>{{extractTime(list.schedule.start_time) }} - {{ extractTime(list.schedule.end_time) }} |  {{xtractDay(list.schedule.day)}}, {{ formatDate(list.schedule.schedule_date) }}</td>
                                         <td>{{ xtractStatus(list.status) }}</td>
                                         <td>{{ formatDate(list.created_at) }}</td>
                                         <td>
@@ -371,7 +373,14 @@ export default {
                    $('.cancel-req').modal('hide');
                });
            }); 
-        }
+        },
+         formatDate(da){
+            let d = new Date(da);
+            const day =("0" + d.getDate()).slice(-2);
+            const month = ("0"+(d.getMonth()+1)).slice(-2);
+            const year =  d.getFullYear();
+            return  month+ "-" + day  + "-" + year;
+        },
     },
     mounted() {
         this.listOfItem();
