@@ -31,10 +31,10 @@
                                             </strong>
                                         </td>
                                         <td>{{ list.medical_service.description }}</td>
-                                        <td>{{extractTime(list.schedule.start_time) }} - {{ extractTime(list.schedule.end_time) }} |  {{xtractDay(list.schedule.day)}}, {{ formatDate(list.schedule.schedule_date)}}</td>
+                                        <td>{{extractTime(list.schedule.start_time) }} - {{ extractTime(list.schedule.end_time) }} |  {{xtractDay(list.schedule.day)}} </td>
                                         <td>{{ list.schedule.healthworker.first_name }} {{ list.schedule.healthworker.last_name }}</td>
                                         <td>{{ list.message }}</td>
-                                        <td>{{ formatDate(list.created_at) }}</td>
+                                        <td>{{ formatDate(list.request_date) }} | {{ extractTime(list.request_time) }}</td>
                                         <td class="text-warning">
                                             <strong> {{ xtractStatus(list.status) }} </strong>
                                         </td>
@@ -126,6 +126,20 @@
                                 </table>
                                 <span class="errors-material" v-if="errors.schedule">{{errors.schedule[0]}}</span>
                             </div>
+                            <small>Request Date:</small>
+                            <hr class="pt-0 mt-0">
+                            <div class="row">
+                                <div class="form-group col-8">
+                                    <label class="control-label">Date:</label>
+                                    <Datepicker class="form-control-sm"  v-model="post.request_date" placeholder="Date" :format="format"/>
+                                    <span class="errors-material" v-if="errors.request_date">{{errors.request_date[0]}}</span>
+                                </div>  
+                                <div class="form-group col-4">
+                                    <label class="control-label">Time:</label>
+                                    <Datepicker class="form-control-sm" v-model="post.request_time" :is-24="false" time-picker mode-height="120" />
+                                    <span class="errors-material" v-if="errors.request_time">{{errors.request_time[0]}}</span>
+                                </div>  
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer text-center">
@@ -211,7 +225,7 @@ export default {
         {label:'SCHEDULE', name:null},
         {label:'HEALTHWORKER', name:null},
         {label:'MESSAGE', name:null},
-        {label:'DATE', name:null},
+        {label:'REQUESTED DATE', name:null},
         {label:'STATUS', name:null},
         {label:'ACTION', name:null},
         ];

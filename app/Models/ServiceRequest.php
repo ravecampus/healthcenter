@@ -17,6 +17,8 @@ class ServiceRequest extends Model
         'user_id', 
         'message',
         'status',
+        'request_date',
+        'request_time'
     ];
 
     public function schedule(){

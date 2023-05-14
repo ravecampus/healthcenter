@@ -56,7 +56,7 @@ class ScheduleController extends Controller
             "start_time" => "required",
             "end_time" => "required",
             "visible" => "required",
-            "schedule_date" => "required",
+            // "schedule_date" => "required",
         ]);
 
         $start = Carbon::createFromTime($request->start_time['hours'], $request->start_time['minutes'], $request->start_time['seconds']);
@@ -68,7 +68,7 @@ class ScheduleController extends Controller
             'start_time' => $start,
             'end_time' => $end,
             'visible' => $request->visible,
-            'schedule_date' => Carbon::parse($request->schedule_date)->format('Y-m-d'),
+            // 'schedule_date' => Carbon::parse($request->schedule_date)->format('Y-m-d'),
         ]);
         
         return response()->json($sched, 200);
@@ -114,7 +114,7 @@ class ScheduleController extends Controller
             "start_time" => "required",
             "end_time" => "required",
             "visible" => "required",
-            "schedule_date" => "required",
+            // "schedule_date" => "required",
         ]);
 
         if(is_string($request->start_time)){
@@ -137,7 +137,7 @@ class ScheduleController extends Controller
             $sched->start_time = $start;
             $sched->end_time = $end;
             $sched->visible = $request->visible;
-            $sched->schedule_date = Carbon::parse($request->schedule_date)->format('Y-m-d');
+            // $sched->schedule_date = Carbon::parse($request->schedule_date)->format('Y-m-d');
             $sched->save();
     
         return response()->json($sched, 200);

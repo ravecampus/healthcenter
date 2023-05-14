@@ -39,10 +39,10 @@
                                             </strong>
                                         </td>
                                         <td>{{ list.medical_service.description }}</td>
-                                        <td>{{extractTime(list.schedule.start_time) }} - {{ extractTime(list.schedule.end_time) }} |  {{xtractDay(list.schedule.day)}}, {{ formatDate(list.schedule.schedule_date) }}</td>
+                                        <td>{{extractTime(list.schedule.start_time) }} - {{ extractTime(list.schedule.end_time) }} |  {{xtractDay(list.schedule.day)}} </td>
                                         <td>{{ list.schedule.healthworker.first_name }} {{ list.schedule.healthworker.last_name }}</td>
                                         <td>{{ list.message }}</td>
-                                        <td>{{ formatDate(list.created_at) }}</td>
+                                        <td>{{ formatDate(list.request_date) }} | {{ extractTime(list.request_time) }}</td>
                                         <td>{{ xtractStatus(list.status) }}</td>
                                        
                                     </tr>
@@ -190,7 +190,7 @@ export default {
         {label:'SCHEDULE', name:null},
         {label:'HEALTHWORKER', name:null},
         {label:'MESSAGE', name:null},
-        {label:'DATE', name:null},
+        {label:'REQUESTED DATE', name:null},
         {label:'STATUS', name:null},
         ];
         

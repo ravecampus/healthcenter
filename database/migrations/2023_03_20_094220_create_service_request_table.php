@@ -19,6 +19,8 @@ class CreateServiceRequestTable extends Migration
             $table->integer('medical_service_id')->nullable();
             $table->integer('user_id')->nullable();
             $table->integer('health_worker_id')->nullable();
+            $table->date('request_date')->nullable();
+            $table->time('request_time')->nullable();
             $table->string('message')->nullable();
             $table->integer('status')->default(0);
             $table->timestamps();

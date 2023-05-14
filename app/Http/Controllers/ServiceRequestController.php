@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ServiceRequest;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class ServiceRequestController extends Controller
 {
@@ -62,16 +63,20 @@ class ServiceRequestController extends Controller
        $request->validate([
            'schedule' => 'required',
            'medical_service' => 'required',
-        //    'user_id' => 'required',
-        //    'message' => 'required|string',
+           'request_date' => 'required',
+           'request_time' => 'required',
            ]);
+
+        $date = Carbon::parse($request->request_date)->format('Y-m-d');
+        $time = Carbon::createFromTime($request->request_time['hours'], $request->request_time['minutes'], $request->request_time['seconds']);
 
         $service = ServiceRequest::create([
             'schedule_id' => $request->schedule,
             'medical_service_id' => $request->medical_service,
             'user_id' => Auth::id(),
             'message' => $request->message,
-            // 'status' => ,
+            'request_date' => $date,
+            'request_time' => $time
             ]);
         
         return response()->json($service, 200);
@@ -153,12 +158,18 @@ class ServiceRequestController extends Controller
             'schedule' => 'required',
             'medical_service' => 'required',
             'patient' => 'required',
+            'request_date' => 'required',
+            'request_time' => 'required'
             ]);
- 
+        $date = Carbon::parse($request->request_date)->format('Y-m-d');
+        $time = Carbon::createFromTime($request->request_time['hours'], $request->request_time['minutes'], $request->request_time['seconds']);
+
          $service = ServiceRequest::create([
              'schedule_id' => $request->schedule,
              'medical_service_id' => $request->medical_service,
              'user_id' => $request->patient,
+             'request_date' => $date,
+             'request_time' => $time,
              ]);
          
          return response()->json($service, 200);

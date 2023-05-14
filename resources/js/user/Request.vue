@@ -36,7 +36,7 @@
                                         <tr>
                                             <th></th>
                                             <th>TIME|DAYS</th>
-                                            <th>DATE</th>
+                                            <!-- <th>DATE</th> -->
                                             <th>HEALTH WORKER</th>
                                         </tr>
                                     </thead>
@@ -52,13 +52,28 @@
                                                 <!-- </div> -->
                                             </td>
                                             <td>{{ extractTime(ls.start_time) }} - {{  extractTime(ls.end_time)}} | {{ xtractDay(ls.day) }}</td>
-                                            <td>{{ formatDate(ls.schedule_date) }}</td>
+                                            <!-- <td>{{ formatDate(ls.schedule_date) }}</td> -->
                                             <td> {{ ls.healthworker.first_name}} {{ ls.healthworker.last_name }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                                 <span class="errors-material" v-if="errors.schedule">{{errors.schedule[0]}}</span>
                             </div>
+                            <small>Request Date:</small>
+                            <hr class="pt-0 mt-0">
+                            <div class="row">
+                                <div class="form-group col-8">
+                                    <label class="control-label">Date:</label>
+                                    <Datepicker class="form-control-sm"  v-model="post.request_date" placeholder="Date" :format="format"/>
+                                    <span class="errors-material" v-if="errors.request_date">{{errors.request_date[0]}}</span>
+                                </div>  
+                                <div class="form-group col-4">
+                                    <label class="control-label">Time:</label>
+                                    <Datepicker class="form-control-sm" v-model="post.request_time" :is-24="false" time-picker mode-height="120" />
+                                    <span class="errors-material" v-if="errors.request_time">{{errors.request_time[0]}}</span>
+                                </div>  
+                            </div>
+                            
                         </div>
                         <div class="col-6">
                             <div class="form-group">
@@ -99,9 +114,9 @@
                                             {{ list.medical_service.description }}
                                             </strong>
                                         </td>
-                                        <td>{{extractTime(list.schedule.start_time) }} - {{ extractTime(list.schedule.end_time) }} |  {{xtractDay(list.schedule.day)}}, {{ formatDate(list.schedule.schedule_date) }}</td>
+                                        <td>{{extractTime(list.schedule.start_time) }} - {{ extractTime(list.schedule.end_time) }} |  {{xtractDay(list.schedule.day)}}</td>
                                         <td>{{ xtractStatus(list.status) }}</td>
-                                        <td>{{ formatDate(list.created_at) }}</td>
+                                        <td>{{ formatDate(list.request_date) }} |  {{ extractTime(list.request_time) }}</td>
                                         <td>
                                             <div class="btn-group" v-if="list.consulted == null">
                                                 <button class="btn btn-info text-white btn-sm" @data-toggle="tooltip" @click="cancelRequest(list)" title="Edit">
@@ -164,13 +179,31 @@
 </template>
 
 <script>
+import { ref } from 'vue';
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+
 import DataTable from '../table/DataTable';
 import PaginationVue from '../table/Pagination';
 
 export default {
     components:{
+        Datepicker,
         dataTable:DataTable,
         pagination:PaginationVue
+    },
+    setup() {
+        // In case of a range picker, you'll receive [Date, Date]
+        const format = (d) => {
+            const day =("0" + d.getDate()).slice(-2);
+            const month = ("0"+(d.getMonth()+1)).slice(-2);
+            const year =  d.getFullYear();
+
+            return  month+ "-" + day  + "-" + year;
+        }
+        return {
+            format,
+        }
     },
     data(){
 
@@ -179,7 +212,7 @@ export default {
         {label:'MEDICAL SERVICE', name:null},
         {label:'SCHEDULE', name:null},
         {label:'STATUS', name:null},
-        {label:'DATE', name:null},
+        {label:'REQUEST DATE|TIME', name:null},
         {label:'ACTION', name:null},
         ];
         

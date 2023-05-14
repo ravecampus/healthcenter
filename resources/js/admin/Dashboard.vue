@@ -63,36 +63,29 @@
           <div class="col-12">
               <div class="card shadow">
                 <div class="card-body ">
-                  <h4>Service Request</h4>
-
-
+                  <h4>Completed Service Request</h4>
                   <div class="table-responsive">
                       <data-table class="mt-2" :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
                           <tbody>
                               <tr class="tr-shadow" v-for="(list, idx) in service_request" :key="idx">
-                                  <td>
-                                      <div class="btn-group">
-                                          <button class="btn btn-info text-white btn-sm" @click="consultation(list)" data-toggle="tooltip" title="Consult">
-                                              <i class="fa fa-user-md"></i> Consultation
-                                          </button>
-                                            <!-- <button class="btn btn-warning text-white btn-sm" @click="showModalAbsent(list)" data-toggle="tooltip" title="Consult">
-                                              <i class="fa fa-times"></i> Absent
-                                          </button>
-                                          <button class="btn btn-danger text-white btn-sm" @click="cancelService(list)" data-toggle="tooltip" title="Consult">
-                                              <i class="fa fa-times"></i> Cancel
-                                          </button> -->
-                                      </div>
-                                  </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-info text-white btn-sm" @click="consultation(list)" data-toggle="tooltip" title="Consult">
+                                            <i class="fa fa-eye"></i> View
+                                        </button>
+                                        
+                                    </div>
+                                </td>
                                   <td class="text-info">
                                       <strong>
                                       {{ list.last_name}}, {{ list.first_name }} {{ list.middle_name }}
                                       </strong>
                                   </td>
                                   <td>{{ list.medical_service.description }}</td>
-                                  <td>{{extractTime(list.schedule.start_time) }} - {{ extractTime(list.schedule.end_time) }} |  {{xtractDay(list.schedule.day)}}, {{ formatDate(list.schedule.schedule_date)}}</td>
+                                  <td>{{extractTime(list.schedule.start_time) }} - {{ extractTime(list.schedule.end_time) }} |  {{xtractDay(list.schedule.day)}}</td>
                                   <td>{{ list.schedule.healthworker.first_name }} {{ list.schedule.healthworker.last_name }}</td>
                                   <td>{{ list.message }}</td>
-                                  <td>{{ formatDate(list.created_at) }}</td>
+                                  <td>{{ formatDate(list.request_date) }} | {{ extractTime(list.request_time) }}</td>
                                   <!-- <td class="text-warning">
                                       <strong> {{ xtractStatus(list.status) }} </strong>
                                   </td> -->
@@ -141,7 +134,7 @@ export default {
         {label:'SCHEDULE', name:null},
         {label:'HEALTHWORKER', name:null},
         {label:'MESSAGE', name:null},
-        {label:'DATE', name:null},
+        {label:'REQUESTED DATE', name:null},
         // {label:'STATUS', name:null},
       
         ];
@@ -185,7 +178,7 @@ export default {
             });
         });
       },
-      listOfServices(urls='api/service-request'){
+      listOfServices(urls='api/completed-sr'){
             this.$axios.get('sanctum/csrf-cookie').then(response => {
                 this.tableData.draw ++;
                 this.$axios.get(urls,{params:this.tableData}).then(res=>{
@@ -276,7 +269,7 @@ export default {
             return num == 0 ? "Pending" : num == 1 ?  "Completed" : num == 2 ? "Cancelled": num == 3 ? "Absent" : "";
         },
         consultation(data){
-            this.$router.push({name:'consultation', params:{'id':data.id}});
+            this.$router.push({name:'viewcompleted', params:{'id':data.id}});
         },
         formatDate(da){
             let d = new Date(da);
