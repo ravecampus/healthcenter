@@ -140,7 +140,7 @@ export const routes = [
             },
             {
                 name: 'completed',
-                path: 'completed-sr',
+                path: 'report',
                 component: Completed,
             },
             {

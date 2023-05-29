@@ -76,7 +76,7 @@
                                     class="fa fa-user-md"></i><span class="hide-menu">Service Request</span></router-link>
                         </li>
                         <li> <router-link class="waves-effect waves-dark" :to="{name:'completed'}" aria-expanded="false"><i
-                            class="fa fa-check"></i><span class="hide-menu">Completed SR</span></router-link>
+                            class="fa fa-file"></i><span class="hide-menu">Report</span></router-link>
                         </li>
                          <li> <router-link class="waves-effect waves-dark" :to="{name:'users'}" aria-expanded="false"><i
                             class="fa fa-users"></i><span class="hide-menu">Users</span></router-link>

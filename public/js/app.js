@@ -24002,7 +24002,7 @@ var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
   "class": "col-md-5 align-self-center"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
   "class": "text-themecolor"
-}, "Service Completed")], -1 /* HOISTED */);
+}, "Report")], -1 /* HOISTED */);
 var _hoisted_4 = {
   "class": "col-md-7 align-self-center"
 };
@@ -25213,11 +25213,11 @@ var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
   "class": "hide-menu"
 }, "Service Request", -1 /* HOISTED */);
 var _hoisted_35 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
-  "class": "fa fa-check"
+  "class": "fa fa-file"
 }, null, -1 /* HOISTED */);
 var _hoisted_36 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
   "class": "hide-menu"
-}, "Completed SR", -1 /* HOISTED */);
+}, "Report", -1 /* HOISTED */);
 var _hoisted_37 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
   "class": "fa fa-users"
 }, null, -1 /* HOISTED */);
@@ -30374,7 +30374,7 @@ var routes = [{
     component: _admin_Consultation__WEBPACK_IMPORTED_MODULE_11__["default"]
   }, {
     name: 'completed',
-    path: 'completed-sr',
+    path: 'report',
     component: _admin_CompletedSR__WEBPACK_IMPORTED_MODULE_13__["default"]
   }, {
     name: 'viewcompleted',

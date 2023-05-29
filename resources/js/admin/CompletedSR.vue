@@ -3,7 +3,7 @@
             
         <div class="row page-titles">
             <div class="col-md-5 align-self-center">
-                <h3 class="text-themecolor">Service Completed</h3>
+                <h3 class="text-themecolor">Report</h3>
             </div>
             <div class="col-md-7 align-self-center">
                 <button type="button" @click="showModal()" class="btn waves-effect waves-light btn btn-info pull-right hidden-sm-down text-white">
