@@ -230,10 +230,11 @@ class ServiceRequestController extends Controller
         $length = $request->length;
         $searchValue = $request->search;
         $query = ServiceRequest::with('schedule', 'medical_service', 'consulted')
-        ->where('status', 1)
-        ->orWhere('status', 2)
-        ->orWhere('status', 3)
-        ->where('user_id', Auth::id())->orderBy('created_at', 'desc');
+        ->where('user_id', Auth::id())
+        ->where('status',"!=", 0)
+        // ->where('status', 2)
+        // ->where('status', 3)
+        ->orderBy('created_at', 'desc');
     
         if($searchValue){
             $query->where(function($query) use ($searchValue){
