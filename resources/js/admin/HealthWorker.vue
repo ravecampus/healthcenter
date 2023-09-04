@@ -96,6 +96,7 @@
                                     <select class="form-control" v-model="post.position">
                                         <option value="1">Nurse</option>
                                         <option value="2">Midwife</option>
+                                        <option value="3">Staff</option>
                                     </select>
                                     <span class="errors-material" v-if="errors.position">{{errors.position[0]}}</span>
                                 </div>
@@ -259,7 +260,7 @@ export default {
             return data == undefined ? true : (data.length > 0) ? true : false;
         },
         extractPostion(num){
-            return num == 1 ? "Nurse" : "Midwife";
+            return num == 1 ? "Nurse" : num == 2 ? "Midwife" : num == 3 ? "Staff" :"";
         }
     },
     mounted() {

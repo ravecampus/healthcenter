@@ -53,7 +53,10 @@
                                             </td>
                                             <td>{{ extractTime(ls.start_time) }} - {{  extractTime(ls.end_time)}} | {{ xtractDay(ls.day) }}</td>
                                             <!-- <td>{{ formatDate(ls.schedule_date) }}</td> -->
-                                            <td> {{ ls.healthworker.first_name}} {{ ls.healthworker.last_name }}</td>
+                                            <td> {{ ls.healthworker.first_name}} {{ ls.healthworker.last_name }}
+                                                <div><small>({{ extractPostion(ls.healthworker.position) }})</small></div>
+                                            </td>
+                                          
                                         </tr>
                                     </tbody>
                                 </table>
@@ -375,7 +378,7 @@ export default {
             return data == undefined ? true : (data.length > 0) ? true : false;
         },
         extractPostion(num){
-            return num == 1 ? "Nurse" : "Midwife";
+            return num == 1 ? "Nurse" : num == 2 ? "Midwife" : num == 3 ? "Staff" :"";
         },
         extractMedicineType(num){
             return num == 1 ? "Tablet" : num == 2 ? "Capsule" : num == 3 ? "Syrup" : num == 4 ? "Suspension" : num == 5 ? "Drops" : num == 6 ? "Powder": ""; 

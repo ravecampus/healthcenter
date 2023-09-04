@@ -71,6 +71,7 @@
                                     <select class="form-control form-control-line" v-model="post.position">
                                         <option value="1">Nurse</option>
                                         <option value="2">Midwife</option>
+                                        <option value="3">Staff</option>
                                     </select>
                                 </div>
                                 <span class="errors-material" v-if="errors.position">{{errors.position[0]}}</span>

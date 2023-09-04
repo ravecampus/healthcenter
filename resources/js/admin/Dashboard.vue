@@ -59,7 +59,7 @@
 
 
         </div>
-        <div class="row">
+        <!-- <div class="row">
           <div class="col-12">
               <div class="card shadow">
                 <div class="card-body ">
@@ -86,9 +86,7 @@
                                   <td>{{ list.schedule.healthworker.first_name }} {{ list.schedule.healthworker.last_name }}</td>
                                   <td>{{ list.message }}</td>
                                   <td>{{ formatDate(list.request_date) }} | {{ extractTime(list.request_time) }}</td>
-                                  <!-- <td class="text-warning">
-                                      <strong> {{ xtractStatus(list.status) }} </strong>
-                                  </td> -->
+                                
                               </tr>
                               <tr> 
                                   <td colspan="11" v-show="!noData(service_request)">
@@ -111,7 +109,7 @@
                 </div>
               </div>
           </div>
-        </div>
+        </div> -->
     </div>
 </template>
 
