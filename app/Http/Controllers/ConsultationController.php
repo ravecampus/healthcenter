@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Consultation;
+use App\Models\ServiceRequest;
+use App\Models\Schedule;
 use Illuminate\Support\Facades\Auth;
 
 class ConsultationController extends Controller
@@ -36,9 +38,11 @@ class ConsultationController extends Controller
      */
     public function store(Request $request)
     {
+        $srvq = ServiceRequest::find($request->service_request);
+        $cons = Schedule::find($srvq->schedule_id);
         $consult = Consultation::create([
             'service_request_id' => $request->service_request,
-            'consultant' => Auth::id(),
+            'consultant' => $cons->health_worker_id,
         ]);
 
         return response()->json($consult, 200);
