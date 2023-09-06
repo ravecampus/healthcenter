@@ -60,6 +60,12 @@ class ServiceRequestController extends Controller
      */
     public function store(Request $request)
     {
+       $pending = ServiceRequest::where('user_id', Auth::id())->where('status', 0)->get();
+
+       if(count($pending)> 0){
+            $errors = ['errors'=>['errs' => ["You have pending request!, you can't proceed!"]]];
+            return response()->json($errors,400);
+       }
        $request->validate([
            'schedule' => 'required',
            'medical_service' => 'required',
@@ -154,6 +160,8 @@ class ServiceRequestController extends Controller
     }
 
     public function addServiceRequest(Request $request){
+      
+
         $request->validate([
             'schedule' => 'required',
             'medical_service' => 'required',

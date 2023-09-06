@@ -15,6 +15,11 @@
         <div class="row">
 
             <div class="col-12">
+                <div class="alert alert-warning p-0" v-if="errors.errs">
+                    <div class="alert errors-material m-0">
+                        <div v-if="errors.errs"><strong>*</strong>{{errors.errs[0]}}</div>
+                    </div>
+                </div>
                 <div class="card shadow-sm">
                     <div class="card-body row">
                          <div class="col-6">
@@ -331,6 +336,7 @@ export default {
                }).catch(err=>{
                    this.btncap = "Send";
                    this.errors = err.response.data.errors;
+                //    his.$emit('show',{'message':'Service Request sent!'});
                });
            });
        
